@@ -336,17 +336,6 @@ body{background:var(--bg);
           <label class="lb" for="stage">المرحلة (بعد التسريع)</label>
           <select class="in n" id="stage">
             <option value="">اختر</option>
-            <option value="1">1</option>
-            <option value="2">2</option>
-            <option value="3">3</option>
-            <option value="4">4</option>
-            <option value="5">5</option>
-            <option value="6">6</option>
-            <option value="7">7</option>
-            <option value="8">8</option>
-            <option value="9">9</option>
-            <option value="10">10</option>
-            <option value="11">11</option>
           </select>
         </div>
       </div>
@@ -505,13 +494,23 @@ body{background:var(--bg);
           $("rfinal").textContent=fd(floor);
           $("rfinald").textContent="المدة الأصغرية 4 سنوات لا يمكن تجاوزها";
           show(1,"الغبن الوظيفي (يُضاف للدرجة 5)",f(gb),"عدد الأيام: "+days(fin,floor));
-          show(2,"المرحلة في الدرجة 5",String(Math.min(11,1+gb.y)),"أول علاوة: "+fd(firstInc(floor,gb.m,gb.d))+(1+gb.y>11?" (الحد الأعلى 11)":""));
+          show(2,"المرحلة في الدرجة 5",String(Math.min(6,1+gb.y)),"أول علاوة: "+fd(firstInc(floor,gb.m,gb.d))+(1+gb.y>6?" (الحد الأعلى 6)":""));
           $("extra").classList.remove("hidden");
         }
       }
     }
     $("resultsCard").classList.remove("hidden");
   }
+  /* المراحل: 5 للدرجات 10-6 ، و6 للدرجات 5-1 (المرحلة 1 حتمية ولا تقلّص المدة) */
+  function fillStages(){
+    var g=parseInt($("grade").value),st=$("stage"),cur=st.value;
+    var max=!g?0:(g>=6?5:(g===1?11:6));
+    st.innerHTML='<option value="">اختر</option>';
+    for(var i=1;i<=max;i++){var o=document.createElement("option");o.value=i;o.textContent=i;st.appendChild(o)}
+    if(cur&&parseInt(cur)<=max)st.value=cur;
+  }
+  $("grade").addEventListener("change",fillStages);
+  fillStages();
   $("calcBtn").addEventListener("click",calc);
 
   $("printBtn").addEventListener("click", function(){
