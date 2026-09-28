@@ -346,7 +346,7 @@ body{background:var(--bg);
     return {y:y,m:m,d:d};
   }
   function f(o){return o.y+" سنة، "+o.m+" شهر، "+o.d+" يوم"}
-  function ad(d,n){return new Date(d.getFullYear(),d.getMonth(),d.getDate()+n)}
+  function am(o,n){var t=o.y*12+o.m+n;return {y:Math.floor(t/12),m:t%12,d:o.d}}
   function ps(s){return s?new Date(s+"T00:00:00"):null}
   function calc(){
     var d1=ps($("d1").value),d2=ps($("d2").value),d3=ps($("d3").value);
@@ -363,13 +363,20 @@ body{background:var(--bg);
     }
     var ma=br(d2,d3),md=days(d1,d2),hd=days(d2,d3);
     var tm=Math.max(0,parseInt($("tm").value)||0);
-    var modAll=md+tm*30;
-    var grand=modAll+hd;
-    $("rmod").textContent=f(br(d1,ad(d2,tm*30)));
+    function dc(o){
+      var t=new Date(d1.getFullYear(),d1.getMonth()+o.y*12+o.m,1);
+      t.setDate(Math.min(d1.getDate(),new Date(t.getFullYear(),t.getMonth()+1,0).getDate()));
+      t.setDate(t.getDate()+o.d);
+      return days(d1,t);
+    }
+    var om=am(br(d1,d2),tm),og=am(br(d1,d3),tm);
+    var modAll=dc(om);
+    var grand=dc(og);
+    $("rmod").textContent=f(om);
     $("rmodd").textContent="عدد الأيام: "+modAll+"";
     $("rmah").textContent=f(ma);
     $("rmahd").textContent="عدد الأيام: "+hd;
-    $("rgrand").textContent=f(br(d1,ad(d3,tm*30)));
+    $("rgrand").textContent=f(og);
     $("rgrandd").textContent="عدد الأيام: "+grand;
     $("resultsCard").classList.remove("hidden");
   }
