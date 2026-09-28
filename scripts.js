@@ -1,4 +1,4 @@
-<script>
+
 (function(){
   var $=function(id){return document.getElementById(id)};
   function days(a,b){return Math.round((Date.UTC(b.getFullYear(),b.getMonth(),b.getDate())-Date.UTC(a.getFullYear(),a.getMonth(),a.getDate()))/86400000)}
@@ -108,4 +108,3 @@
     window.print();
   });
 })();
-</script>
