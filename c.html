@@ -317,7 +317,7 @@ body{background:var(--bg);
       </div>
       <div class="f-2">
         <div>
-          <label class="lb" for="grade">الدرجة (بعد التسريع)</label>
+          <label class="lb" for="grade">الدرجة بعد التسريع مباشرةً</label>
           <select class="in n" id="grade">
             <option value="">اختر</option>
             <option value="10">10</option>
@@ -333,7 +333,7 @@ body{background:var(--bg);
           </select>
         </div>
         <div>
-          <label class="lb" for="stage">المرحلة (بعد التسريع)</label>
+          <label class="lb" for="stage">المرحلة بعد التسريع مباشرةً</label>
           <select class="in n" id="stage">
             <option value="">اختر</option>
           </select>
@@ -351,7 +351,7 @@ body{background:var(--bg);
     <div class="card-head"><h3>النتيجة</h3></div>
     <div class="res-row">
       <div class="res">
-        <div class="rt">المدوَّر+التشكرات</div>
+        <div class="rt">المدوَّر والتشكرات</div>
         <div class="rv n" id="rmod">—</div>
         <div class="rd n" id="rmodd"></div>
         <div class="card-head" style="margin-top:15px; margin-bottom:15px;"><h2>-------------------------------</h2></div>
@@ -363,11 +363,11 @@ body{background:var(--bg);
         <div class="rv n" id="rgrand">—</div>
         <div class="rd n" id="rgrandd"></div>
         <div class="card-head" style="margin-top:15px; margin-bottom:15px;"><h2>-------------------------------</h2></div>
-        <div class="rt">الترقية القادمة</div>
+        <div class="rt">الترقية القياسية القادمة</div>
         <div class="rv n" id="rnext">—</div>
         <div class="rd n" id="rnextd"></div>
         <div class="card-head" style="margin-top:15px; margin-bottom:15px;"><h2>-------------------------------</h2></div>
-        <div class="rt">الترقية القادمة بعد طرح المجموع</div>
+        <div class="rt">الترقية الفعلية القادمة</div>
         <div class="rv n" id="rfinal">—</div>
         <div class="rd n" id="rfinald"></div>
         <div id="extra" class="hidden">
@@ -380,7 +380,7 @@ body{background:var(--bg);
           <div class="rv n" id="ex2v"></div>
           <div class="rd n" id="ex2d"></div>
         </div>
-        <footer class="sig">ملاحظة: إذا كان تاريخ الحصول على الشهادة والتخرج يسبق تاريخ تغيير العنوان الوظيفي، فلا يوجد مدور من العنوان السابق</footer>
+        <footer class="sig">تم أستخدام قانون موظفي الدولة وقوانين وزارة المالية النافذة في الحساب</footer>
  
       </div>
       
@@ -451,11 +451,11 @@ body{background:var(--bg);
     var modAll=dc(om);
     var grand=dc(og);
     $("rmod").textContent=f(om);
-    $("rmodd").textContent="عدد الأيام: "+modAll+"";
+    ("rmodd").textContent="عدد الأيام: "+modAll+"";
     $("rmah").textContent=f(ma);
-    $("rmahd").textContent="عدد الأيام: "+hd;
+    ("rmahd").textContent="عدد الأيام: "+hd;
     $("rgrand").textContent=f(og);
-    $("rgrandd").textContent="عدد الأيام: "+grand;
+    ("rgrandd").textContent="عدد الأيام: "+grand;
 
     /* الترقية القادمة */
     $("extra").classList.add("hidden");
@@ -471,21 +471,19 @@ body{background:var(--bg);
       $("rnext").textContent="لا توجد ترقية أعلى";
       $("rnextd").textContent="";
       $("rfinal").textContent="—";
-      $("rfinald").textContent="";
+      ("rfinald").textContent="";
       var ns=Math.min(11,stage+og.y);
-      show(1,"العلاوات المستحقة من المجموع",og.y+" علاوة","المرحلة الجديدة: "+ns+(stage+og.y>11?" (الحد الأعلى 11)":""));
-      show(2,"موعد العلاوة القادمة",fd(firstInc(d3,og.m,og.d)),"بعد تقليص "+og.m+" شهر و"+og.d+" يوم من السنة");
+      show(1," عدد العلاوات المتراكمة",og.y+" علاوة","المرحلة الجديدة: "+ns+(stage+og.y>11?"":""));
+      show(2,"موعد العلاوة القادمة",fd(firstInc(d3,og.m,og.d)));
       $("extra").classList.remove("hidden");
     }else{
       var yrs=Math.max(0,baseYears(grade)-(stage-1)); // كل علاوة (مرحلة) تقلّص سنة
       var next=addMonths(d3,yrs*12);
       $("rnext").textContent=fd(next);
-      $("rnextd").textContent="المدة: "+yrs+" سنة (الأساس "+baseYears(grade)+" سنوات − "+(stage-1)+" علاوة)";
-      /* طرح المجموع (المدور + المهدور + التشكرات) من الترقية القادمة */
+    
       var fin=addMonths(next,-(og.y*12+og.m));
       fin.setDate(fin.getDate()-og.d);
       $("rfinal").textContent=fd(fin);
-      $("rfinald").textContent="بعد طرح: "+f(og);
     }
     $("resultsCard").classList.remove("hidden");
   }
