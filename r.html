@@ -346,10 +346,7 @@ body{background:var(--bg);
     return {y:y,m:m,d:d};
   }
   function f(o){return o.y+" سنة، "+o.m+" شهر، "+o.d+" يوم"}
-  function fd(totalDays){
-    var y=Math.floor(totalDays/365),r=totalDays-y*365,m=Math.floor(r/30),d=r-m*30;
-    return y+" سنة، "+m+" شهر، "+d+" يوم";
-  }
+  function ad(d,n){return new Date(d.getFullYear(),d.getMonth(),d.getDate()+n)}
   function ps(s){return s?new Date(s+"T00:00:00"):null}
   function calc(){
     var d1=ps($("d1").value),d2=ps($("d2").value),d3=ps($("d3").value);
@@ -368,11 +365,11 @@ body{background:var(--bg);
     var tm=Math.max(0,parseInt($("tm").value)||0);
     var modAll=md+tm*30;
     var grand=modAll+hd;
-    $("rmod").textContent=fd(modAll);
+    $("rmod").textContent=f(br(d1,ad(d2,tm*30)));
     $("rmodd").textContent="عدد الأيام: "+modAll+"";
     $("rmah").textContent=f(ma);
     $("rmahd").textContent="عدد الأيام: "+hd;
-    $("rgrand").textContent=fd(grand);
+    $("rgrand").textContent=f(br(d1,ad(d3,tm*30)));
     $("rgrandd").textContent="عدد الأيام: "+grand;
     $("resultsCard").classList.remove("hidden");
   }
