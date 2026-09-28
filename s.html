@@ -110,15 +110,14 @@
         /* Results card: shown only when at least one result block is visible */
         .result-card:not(:has(> .result:not(.hidden), > .details:not(.hidden))) { display: none; }
         .result { border-radius: 16px; padding: 14px 18px; text-align: center; width: 100%; margin-bottom: 12px; background: var(--bg); font-size: 19px; font-weight: 600; line-height: 1.35; color: var(--text); }
-        .result span { font-weight: 600; color: var(--light-green); margin: 0 4px; direction: ltr; display: inline-block; }
+        .result span { font-weight: 500; color: var(--light-green); margin: 0 4px; direction: ltr; display: inline-block; }
         #serviceDuration { font-size: 15px; color: var(--text-2); }
         .details { border-radius: 16px; padding: 14px 18px; width: 100%; background: var(--bg); font-size: 15px; font-weight: 500; line-height: 1.8; color: var(--text); text-align: center; }
-        .details h4 { font-size: 13px; font-weight: 600; color: var(--text-3); margin: 6px 0 6px; line-height: 1.4; }
+        .details h4 { font-size: 13px; font-weight: 500; color: var(--text-3); margin: 6px 0 6px; line-height: 1.4; }
         .details hr { border: none; border-top: 1px solid var(--border) !important; margin: 6px 0 10px !important; }
-        .details strong { font-size: 13px; font-weight: 600; color: var(--text-3); }
-        .details span { font-weight: 600; margin: 0 4px; direction: ltr; display: inline-block; font-variant-numeric: tabular-nums; }
+        .details strong { font-size: 12px; font-weight: 600; color: var(--text-3); }
+        .details span { font-weight: 500; margin: 0 4px; direction: ltr; display: inline-block; font-variant-numeric: tabular-nums; }
         .details ul { list-style: none; direction: rtl; text-align: center; padding: 0; margin: 0 0 14px; }
-        .details li { padding: 6px 0; text-align: center; direction: rtl; border-bottom: 1px solid var(--border); font-size: 15px; }
         .details li:last-child { border-bottom: none; }
 
         .sig { text-align: center; font-size: 11px; color: var(--text-4); margin-top: 28px; }
@@ -727,7 +726,7 @@
                     `<li>تاريخ آخر ترفيع: <span>${formattedLastPromotionDate}</span></li>` +
                     `<li>الترفيع القادم: <span>${nextPromotionDateText}</span></li>` +
                     `<li>حالة الترفيع: <span>${promotionStatusDisplay}</span></li>` +
-                    `<li>العلاوة القادمة: <span>${nextAnnualDateText}</span></li>` +
+                    `<li>العلاوة القادمة: <spa${nextAnnualDateText}</span></li>` +
                     `<li>حالة العلاوة: <span>${annualStatusDisplay}</span></li>` +
                     `<li>موقع العمل: <span>${workTypeText}</span></li>` +
                     `<li>الشهادة: <span>${degreeText}</span></li>` +
