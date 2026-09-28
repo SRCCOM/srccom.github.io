@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html dir="rtl" lang="ar">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>حاسبة المدوَّر والمهدور</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Alan+Sans:wght@300..900&family=Rubik:ital,wght@0,300..900;1,300..900&display=swap" rel="stylesheet">
+<style>
+
+
+.alan-sans-<uniquifier> {
+  font-family: "Alan Sans", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: <weight>;
+  font-style: normal;
+}
+
+*{margin:0;
+  padding:0;
+  box-sizing:border-box;
+  font-family:var(--sans)}
+:root{
+  --text:#1d1d1f;
+  --text-2:#6e6e73; 
+  --text-3:#86868b; 
+  --text-4:#aeaeb2;
+  --border:#CCCCCC; 
+  --surface:#fff;
+  --bg:#f5f5f7;
+  --accent:#0066cc; 
+  --danger:#ff3b30;
+  --light-green:#00B295; 
+  --light-green-text:#FFFFFF;
+    --sans:"Alan Sans","SF Pro Text","Segoe UI",Tahoma,Arial,sans-serif;
+  --shadow:0 12px 32px rgba(0,0,0,.08),0 2px 8px rgba(0,0,0,.04);
+  color-scheme:light;
+}
+
+:root{
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px);
+  padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media(prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    color-scheme:dark;
+    --text:#f5f5f7; 
+    --text-2:#a1a1a6; 
+    --text-3:#8e8e93; 
+    --text-4:#6e6e73;
+    --border:#38383a; 
+    --surface:#1c1c1e;
+    --bg:#000;
+    --accent:#4da3ff;
+    --danger:#ff6961;
+    --shadow:0 12px 32px rgba(0,0,0,.55),0 2px 8px rgba(0,0,0,.35);
+  }
+}
+:root[data-theme="dark"]{
+  color-scheme:dark;
+  --text:#f5f5f7; 
+  --text-2:#a1a1a6; 
+  --text-3:#8e8e93; 
+  --text-4:#6e6e73;
+  --border:#38383a; 
+  --surface:#1c1c1e; 
+  --bg:#000;
+  --accent:#4da3ff; 
+  --danger:#ff6961;
+  --shadow:0 12px 32px rgba(0,0,0,.55),0 2px 8px rgba(0,0,0,.35);
+}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{background:var(--bg);
+  color:var(--text);
+  -webkit-font-smoothing:antialiased}
+.n{font-variant-numeric:tabular-nums;
+  font-feature-settings:"tnum" 1}
+.hidden{display:none}
+.wrap{max-width:820px;
+  margin:0 auto;
+  padding:24px 16px 48px;
+  width:100%;}
+
+.hero{text-align:center;
+  padding:44px 16px 8px}
+.hero h1{font-size:30px;
+  font-weight:700;
+  line-height:1.25;
+  margin-bottom:10px}
+.hero p{font-size:15px;
+  color:var(--text-2);
+  max-width:480px;
+  margin:0 auto;
+  line-height:1.6}
+
+.card{
+  max-width:680px;
+  width:100%;
+  margin:22px auto 0;
+  padding:28px 24px;
+  background:var(--surface);
+  border:1px solid var(--border);
+  border-radius:26px;
+  box-shadow:var(--shadow);
+}
+.card-head{text-align:center;
+  margin-bottom:22px}
+.card-head h2{font-size:13px;
+  font-weight:600;
+  color:var(--text-3)}
+
+.f-row {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  width: 100%;
+  margin-bottom: 6px;
+}
+.f-row > div {
+  width: 100%;
+  min-width: 0; 
+  display: flex;
+  flex-direction: column;
+}
+
+.lb{
+  font-size:13px;
+  color:var(--text-2);
+  margin-bottom:6px;
+  min-height:20px;
+  line-height:1.4;
+}
+
+ .in{
+  display:block;
+  width:100%;
+  min-width: 0; 
+  max-width: 100%;
+  box-sizing:border-box;
+  margin:0;
+  -webkit-appearance: none; 
+  appearance: none;
+  border:1px solid var(--border);
+  border-radius:12px;
+  padding:11px 12px; 
+  font-size:15px;
+  background:var(--bg);
+  color:var(--text);
+  transition:border-color .15s ease,box-shadow .15s ease;
+ }
+  
+ .in:focus{outline:none;
+   border-color:var(--accent);
+   box-shadow:0 0 0 3px color-mix(in srgb,var(--accent) 18%,transparent)}
+
+ .thanks{border-top:1px solid var(--border);
+   margin-top:22px;padding-top:22px}
+
+ .btn-row{text-align:center;
+   margin-top:26px;
+   display: flex;
+   justify-content: center;
+   gap: 12px;
+   flex-wrap: wrap;
+ }
+  
+ .btn{display:inline-block;
+  font-size:15px;
+  font-weight:600;
+  color:var(--light-green-text);
+  background:var(--light-green);
+  border:1px solid rgba(0,0,0,.16);
+  border-radius:980px;
+  padding:13px 44px;
+  cursor:pointer;
+  -webkit-tap-highlight-color:transparent;
+  -webkit-user-select:none;
+  user-select:none;
+  transition:opacity .15s ease,transform .1s ease}
+
+ .btn.secondary {
+   background: var(--accent);
+ }
+
+ .btn:hover{opacity:.85}
+
+ .btn:active{transform:scale(.97)}
+
+ .err{font-size:13px;
+  color:var(--danger);
+  text-align:center;
+  margin-top:14px;
+  min-height:18px}
+
+.res-row{display:flex;
+  flex-wrap:wrap;
+  justify-content:center;
+  align-items:flex-start;
+  gap:12px}
+
+.res{
+  border-radius:16px;
+  padding:14px 18px;
+  text-align:center;
+  width: 100%;
+}
+
+.res .rt{font-size:13px;
+  font-weight:600;
+  color:var(--text-3);
+  margin-bottom:6px;
+  line-height:1.4}
+
+.res .rv{font-size:19px;
+  font-weight:600;
+  line-height:1.35}
+
+ .res .rd{font-size:12px;
+   color:var(--text-4);
+   margin-top:4px}
+
+
+.short-line{width:120px;
+  max-width:50%;
+  height:1px;
+  background:var(--border);
+  margin:20px auto 0}
+
+
+.sig{text-align:center;
+  font-size:11px;
+  color:var(--text-4);
+  margin-top:28px}
+
+
+@media(max-width:600px){
+  .wrap { padding: 16px 12px 32px; }
+  .card { padding: 22px 14px; }
+  .f-row { gap: 14px; }
+}
+
+@media(prefers-reduced-motion:reduce){*{transition:none!important}}
+
+
+@media print {
+  * {
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+  body {
+    background-color: var(--surface) !important;
+  }
+
+  .card:not(#resultsCard), .no-print, .hero p, .err {
+    display: none !important;
+  }
+ 
+  .card {
+    box-shadow: none !important;
+    border: 1px solid var(--border) !important;
+    margin-top: 0 !important;
+  }
+  .wrap {
+    padding-top: 0 !important;
+  }
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="hero">
+    <h1>حاسبة الغبن</h1>
+    <p>موقع مصمم لحساب الأيام المهدورة لمن أحتُسِبت له شهادة جديدة.</p>
+  </header>
+
+  <section class="card">
+    <div class="card-head"><h3>أدخل البيانات</h3></div>
+    
+    <div class="f-row">
+      <div>
+        <label class="lb" for="d1">آخر  ترقية قبل احتساب الشهادة</label>
+        <input class="in n" type="date" id="d1" value="2010-06-01">
+      </div>
+      <div>
+        <label class="lb" for="d2">تاريخ الأمر الأداري للإحتساب</label>
+        <input class="in n" type="date" id="d2" value="2020-06-01">
+      </div>
+      <div>
+        <label class="lb" for="d3">تاريخ الترقية الجديدة بعد نهاية التسريع</label>
+        <input class="in n" type="date" id="d3" value="2025-01-01">
+      </div>
+      <div>
+        <label class="lb" for="tm"> التشكرات منذ آخر ترقية قبل الاحتساب</label>
+        <input class="in n" type="number" id="tm" min="0" value="">
+      </div>
+    </div>
+
+    <div class="btn-row">
+      <button class="btn" id="calcBtn" type="button">حساب النتائج</button>
+    </div>
+    <div class="err" id="err"></div>
+  </section>
+
+  <section class="card result-card hidden" id="resultsCard">
+    <div class="card-head"><h3>النتيجة</h3></div>
+    <div class="res-row">
+      <div class="res">
+        <div class="rt">المدوَّر+التشكرات</div>
+        <div class="rv n" id="rmod">—</div>
+        <div class="rd n" id="rmodd"></div>
+        <div class="card-head" style="margin-top:15px; margin-bottom:15px;"><h2>-------------------------------</h2></div>
+        <div class="rt">المهدور</div>
+        <div class="rv n" id="rmah">—</div>
+        <div class="rd n" id="rmahd"></div>
+        <div class="card-head" style="margin-top:15px; margin-bottom:15px;"><h2>-------------------------------</h2></div>
+        <div class="rt">المجموع</div>
+        <div class="rv n" id="rgrand">—</div>
+        <div class="rd n" id="rgrandd"></div>
+        <footer class="sig">ملاحظة: إذا كان تاريخ الحصول على الشهادة والتخرج يسبق تاريخ تغيير العنوان الوظيفي، فلا يوجد مدور من العنوان السابق</footer>
+ 
+      </div>
+      
+    </div>
+    
+    
+    <div class="short-line no-print"></div>
+    <div class="btn-row no-print" style="margin-top: 20px;">
+      <button class="btn secondary" id="printBtn" type="button">طباعة النتيجة</button>
+    </div>
+ </section>
+<footer class="sig">هذا الموقع مصمم خصيصاَ لمنتسبي شركة مصافي الجنوب</footer>
+
+</div>
+
+<script>
+(function(){
+  var $=function(id){return document.getElementById(id)};
+  function days(a,b){return Math.round((Date.UTC(b.getFullYear(),b.getMonth(),b.getDate())-Date.UTC(a.getFullYear(),a.getMonth(),a.getDate()))/86400000)}
+  function br(a,b){
+    var y=b.getFullYear()-a.getFullYear(),m=b.getMonth()-a.getMonth(),d=b.getDate()-a.getDate();
+    if(d<0){m--;d+=new Date(b.getFullYear(),b.getMonth(),0).getDate()}
+    if(m<0){y--;m+=12}
+    return {y:y,m:m,d:d};
+  }
+  function f(o){return o.y+" سنة، "+o.m+" شهر، "+o.d+" يوم"}
+  function am(o,n){var t=o.y*12+o.m+n;return {y:Math.floor(t/12),m:t%12,d:o.d}}
+  function ps(s){return s?new Date(s+"T00:00:00"):null}
+  function calc(){
+    var d1=ps($("d1").value),d2=ps($("d2").value),d3=ps($("d3").value);
+    var e="";
+    if(!d1||!d2||!d3)e="يرجى إدخال التواريخ الثلاثة كاملة.";
+    else if(d1>d2)e="تاريخ آخر عنوان يجب أن يكون قبل أو في تاريخ احتساب الشهادة.";
+    else if(d2>d3)e="تاريخ احتساب الشهادة يجب أن يكون قبل أو في تاريخ نهاية التسريع.";
+    $("err").textContent=e;
+    if(e){
+      $("resultsCard").classList.add("hidden");
+      $("rmod").textContent=$("rmah").textContent=$("rgrand").textContent="—";
+      $("rmodd").textContent=$("rmahd").textContent=$("rgrandd").textContent="";
+      return;
+    }
+    var ma=br(d2,d3),md=days(d1,d2),hd=days(d2,d3);
+    var tm=Math.max(0,parseInt($("tm").value)||0);
+    function dc(o){
+      var t=new Date(d1.getFullYear(),d1.getMonth()+o.y*12+o.m,1);
+      t.setDate(Math.min(d1.getDate(),new Date(t.getFullYear(),t.getMonth()+1,0).getDate()));
+      t.setDate(t.getDate()+o.d);
+      return days(d1,t);
+    }
+    var om=am(br(d1,d2),tm),og=am(br(d1,d3),tm);
+    var modAll=dc(om);
+    var grand=dc(og);
+    $("rmod").textContent=f(om);
+    $("rmodd").textContent="عدد الأيام: "+modAll+"";
+    $("rmah").textContent=f(ma);
+    $("rmahd").textContent="عدد الأيام: "+hd;
+    $("rgrand").textContent=f(og);
+    $("rgrandd").textContent="عدد الأيام: "+grand;
+    $("resultsCard").classList.remove("hidden");
+  }
+  $("calcBtn").addEventListener("click",calc);
+
+  $("printBtn").addEventListener("click", function(){
+    window.print();
+  });
+})();
+</script>
+</body>
+</html>
