@@ -430,7 +430,6 @@ body{background:var(--bg);
     var e="";
     if(!d1||!d2||!d3)e="يرجى إدخال التواريخ الثلاثة كاملة.";
     else if(d1>d2)e="تاريخ آخر عنوان يجب أن يكون قبل أو في تاريخ احتساب الشهادة.";
-    else if(d2>d3)e="تاريخ احتساب الشهادة يجب أن يكون قبل أو في تاريخ نهاية التسريع.";
     else if(!grade||!stage)e="يرجى اختيار الدرجة والمرحلة.";
     $("err").textContent=e;
     if(e){
@@ -439,7 +438,10 @@ body{background:var(--bg);
       $("rmodd").textContent=$("rmahd").textContent=$("rgrandd").textContent=$("rnextd").textContent=$("rfinald").textContent="";
       return;
     }
-    var ma=br(d2,d3),md=days(d1,d2),hd=days(d2,d3);
+    var early = d3 < d2; // الترقية بعد التسريع أقدم من تاريخ الاحتساب
+    var ma = early ? {y:0,m:0,d:0} : br(d2,d3);
+    var md = days(d1,d2);
+    var hd = early ? 0 : days(d2,d3);
     var tm=Math.max(0,parseInt($("tm").value)||0);
     function dc(o){
       var t=new Date(d1.getFullYear(),d1.getMonth()+o.y*12+o.m,1);
@@ -447,15 +449,16 @@ body{background:var(--bg);
       t.setDate(t.getDate()+o.d);
       return days(d1,t);
     }
-    var om=am(br(d1,d2),tm),og=am(br(d1,d3),tm);
+    var om=am(br(d1,d2),tm);
+    var og = early ? om : am(br(d1,d3),tm); // المجموع = المدوَّر + 0
     var modAll=dc(om);
     var grand=dc(og);
     $("rmod").textContent=f(om);
-    ("rmodd").textContent="عدد الأيام: "+modAll+"";
+    $("rmodd").textContent="عدد الأيام: "+modAll;
     $("rmah").textContent=f(ma);
-    ("rmahd").textContent="عدد الأيام: "+hd;
+    $("rmahd").textContent="عدد الأيام: "+hd;
     $("rgrand").textContent=f(og);
-    ("rgrandd").textContent="عدد الأيام: "+grand;
+    $("rgrandd").textContent="عدد الأيام: "+grand;
 
     /* الترقية القادمة */
     $("extra").classList.add("hidden");
@@ -471,10 +474,10 @@ body{background:var(--bg);
       $("rnext").textContent="لا توجد ترقية أعلى";
       $("rnextd").textContent="";
       $("rfinal").textContent="—";
-      ("rfinald").textContent="";
+      $("rfinald").textContent="";
       var ns=Math.min(11,stage+og.y);
       show(1," عدد العلاوات المتراكمة",og.y+" علاوة","المرحلة الجديدة: "+ns+(stage+og.y>11?"":""));
-      show(2,"موعد العلاوة القادمة",fd(firstInc(d3,og.m,og.d)));
+      show(2,"موعد العلاوة القادمة",fd(firstInc(d3,og.m,og.d)),"");
       $("extra").classList.remove("hidden");
     }else{
       var yrs=Math.max(0,baseYears(grade)-(stage-1)); // كل علاوة (مرحلة) تقلّص سنة
