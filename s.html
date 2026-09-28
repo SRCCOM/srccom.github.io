@@ -85,40 +85,7 @@
         }
         .in:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 18%, transparent); }
 
-        .odometer-picker {
-            position: relative; width: 100%; height: 132px;
-            display: flex; align-items: stretch; justify-content: center; gap: 4px;
-            padding: 0 10px; border-radius: 12px; border: 1px solid var(--border);
-            background: var(--bg); direction: ltr; overflow: hidden;
-            transition: border-color .15s ease, box-shadow .15s ease;
-        }
-        .odometer-picker:focus-within { border-color: var(--accent); box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 18%, transparent); }
-        .odometer-wheel {
-            position: relative; flex: 1 1 0; max-width: 64px; height: 100%;
-            overflow-y: scroll; scroll-snap-type: y mandatory;
-            -webkit-overflow-scrolling: touch; scrollbar-width: none; -ms-overflow-style: none;
-        }
-        .odometer-wheel[data-unit="year"] { flex: 1.5 1 0; max-width: 96px; }
-        .odometer-wheel::-webkit-scrollbar { display: none; }
-        .odometer-list { display: flex; flex-direction: column; }
-        .odometer-list .odometer-item {
-            height: 44px; min-height: 44px; max-height: 44px; box-sizing: border-box;
-            display: flex; align-items: center; justify-content: center;
-            scroll-snap-align: center; font-size: 15px; line-height: 1; font-weight: 500;
-            color: var(--text-4); font-family: var(--sans);
-            font-variant-numeric: tabular-nums; font-feature-settings: "tnum" 1;
-            white-space: nowrap; overflow: hidden;
-            transition: color 0.15s ease, font-size 0.15s ease, font-weight 0.15s ease;
-            user-select: none; cursor: pointer;
-        }
-        .odometer-list .odometer-item.odometer-active { color: var(--accent); font-size: 19px; font-weight: 600; }
-        .odometer-sep { align-self: center; font-size: 18px; line-height: 1; font-weight: 600; color: var(--text-4); }
-        .odometer-frame {
-            position: absolute; top: 50%; left: 8px; right: 8px;
-            transform: translateY(-50%); height: 44px; box-sizing: border-box;
-            border: 1px solid var(--accent); background: color-mix(in srgb, var(--accent) 8%, transparent);
-            border-radius: 10px; pointer-events: none; z-index: 1;
-        }
+        .n { font-variant-numeric: tabular-nums; font-feature-settings: "tnum" 1; }
 
         .btn-row { text-align: center; margin: 26px auto 0; max-width: 680px; display: flex; justify-content: center; gap: 12px; flex-wrap: wrap; }
         .btn {
@@ -193,28 +160,12 @@
             <div class="card-head"><h3>العلاوة والترفيع</h3></div>
             <div class="f-row">
                 <div class="form-group">
-                    <label class="lb">تاريخ التعيين</label>
-                    <div class="odometer-picker" id="dateOfAppointmentPicker">
-                        <div class="odometer-frame"></div>
-                        <div class="odometer-wheel" data-unit="year"><div class="odometer-list"></div></div>
-                        <span class="odometer-sep">/</span>
-                        <div class="odometer-wheel" data-unit="month"><div class="odometer-list"></div></div>
-                        <span class="odometer-sep">/</span>
-                        <div class="odometer-wheel" data-unit="day"><div class="odometer-list"></div></div>
-                    </div>
-                    <input type="hidden" id="dateOfAppointment" name="dateOfAppointment" value="">
+                    <label class="lb" for="dateOfAppointment">تاريخ التعيين</label>
+                    <input class="in n" type="date" id="dateOfAppointment" name="dateOfAppointment">
                 </div>
                 <div class="form-group">
-                    <label class="lb">تاريخ آخر ترفيع</label>
-                    <div class="odometer-picker" id="lastPromotionDatePicker">
-                        <div class="odometer-frame"></div>
-                        <div class="odometer-wheel" data-unit="year"><div class="odometer-list"></div></div>
-                        <span class="odometer-sep">/</span>
-                        <div class="odometer-wheel" data-unit="month"><div class="odometer-list"></div></div>
-                        <span class="odometer-sep">/</span>
-                        <div class="odometer-wheel" data-unit="day"><div class="odometer-list"></div></div>
-                    </div>
-                    <input type="hidden" id="lastPromotionDate" name="lastPromotionDate" value="">
+                    <label class="lb" for="lastPromotionDate">تاريخ آخر ترفيع</label>
+                    <input class="in n" type="date" id="lastPromotionDate" name="lastPromotionDate">
                 </div>
                 <div class="form-group">
                     <label class="lb" for="degreeType">الشهادة</label>
@@ -566,174 +517,14 @@
         return { years, months, days };
     }
 
-    const ODOMETER_ITEM_HEIGHT = 44;
-    const ODOMETER_REPEATS = 25;
-
-    function daysInMonthOf(year, month) {
-        return new Date(year, month, 0).getDate();
-    }
-
-    function odometerPad(n) {
-        return String(n).padStart(2, '0');
-    }
-
-    function createOdometerPicker(pickerId, hiddenInputId, initial) {
-        const picker = document.getElementById(pickerId);
-        if (!picker) return null;
-        const hiddenInput = document.getElementById(hiddenInputId);
-        const nowYear = new Date().getFullYear();
-        const minYear = nowYear - 70;
-        const maxYear = nowYear + 5;
-        const yearValues = [];
-        for (let y = minYear; y <= maxYear; y++) yearValues.push(y);
-        const monthValues = Array.from({ length: 12 }, (_, i) => i + 1);
-        const state = { year: initial.year, month: initial.month, day: initial.day };
-        const wheels = {};
-
-        function emitValue() {
-            hiddenInput.value = `${state.year}/${odometerPad(state.month)}/${odometerPad(state.day)}`;
-        }
-
-        function renderWheelItems(unit, values) {
-            const wheelEl = picker.querySelector(`.odometer-wheel[data-unit="${unit}"]`);
-            const listEl = wheelEl.querySelector('.odometer-list');
-            listEl.innerHTML = '';
-            const items = [];
-            for (let c = 0; c < ODOMETER_REPEATS; c++) {
-                values.forEach(v => {
-                    const item = document.createElement('div');
-                    item.className = 'odometer-item';
-                    item.textContent = unit === 'year' ? String(v) : odometerPad(v);
-                    item.dataset.value = String(v);
-                    listEl.appendChild(item);
-                    items.push(item);
-                });
-            }
-            wheelEl.style.paddingTop = ODOMETER_ITEM_HEIGHT + 'px';
-            wheelEl.style.paddingBottom = ODOMETER_ITEM_HEIGHT + 'px';
-            wheels[unit] = { el: wheelEl, listEl, values, items, suppress: false, settleTimer: null };
-        }
-
-        function indexForValue(unit, value) {
-            const w = wheels[unit];
-            const posInCycle = w.values.indexOf(value);
-            const middleCopy = Math.floor(ODOMETER_REPEATS / 2);
-            return middleCopy * w.values.length + (posInCycle < 0 ? 0 : posInCycle);
-        }
-
-        function setActiveItem(unit, idx) {
-            const w = wheels[unit];
-            w.items.forEach(it => it.classList.remove('odometer-active'));
-            if (w.items[idx]) w.items[idx].classList.add('odometer-active');
-        }
-
-        function currentIndex(unit) {
-            const w = wheels[unit];
-            return Math.round(w.el.scrollTop / ODOMETER_ITEM_HEIGHT);
-        }
-
-        function scrollToValue(unit, value) {
-            const w = wheels[unit];
-            const idx = indexForValue(unit, value);
-            w.suppress = true;
-            w.el.scrollTop = idx * ODOMETER_ITEM_HEIGHT;
-            setActiveItem(unit, idx);
-            requestAnimationFrame(() => {
-                const cur = wheels[unit];
-                if (cur) cur.suppress = false;
-            });
-        }
-
-        function refreshDayWheel() {
-            const maxDay = daysInMonthOf(state.year, state.month);
-            const dayValues = Array.from({ length: maxDay }, (_, i) => i + 1);
-            if (state.day > maxDay) state.day = maxDay;
-            renderWheelItems('day', dayValues);
-            scrollToValue('day', state.day);
-        }
-
-        function onWheelSettle(unit) {
-            const w = wheels[unit];
-            if (!w) return;
-            const idx = Math.max(0, Math.min(w.items.length - 1, currentIndex(unit)));
-            const value = w.values[idx % w.values.length];
-            setActiveItem(unit, idx);
-            if (unit === 'year') state.year = value;
-            if (unit === 'month') state.month = value;
-            if (unit === 'day') state.day = value;
-            if (unit === 'month' || unit === 'year') {
-                refreshDayWheel();
-            }
-            const copyIndex = Math.floor(idx / w.values.length);
-            const middleCopy = Math.floor(ODOMETER_REPEATS / 2);
-            if (Math.abs(copyIndex - middleCopy) > 3) {
-                scrollToValue(unit, value);
-            }
-            emitValue();
-        }
-
-        function attachWheelEvents(unit) {
-            const wheelEl = picker.querySelector(`.odometer-wheel[data-unit="${unit}"]`);
-            wheelEl.addEventListener('scroll', () => {
-                const w = wheels[unit];
-                if (!w || w.suppress) return;
-                const idx = Math.max(0, Math.min(w.items.length - 1, currentIndex(unit)));
-                setActiveItem(unit, idx);
-                clearTimeout(w.settleTimer);
-                w.settleTimer = setTimeout(() => onWheelSettle(unit), 130);
-            });
-            wheelEl.addEventListener('click', (e) => {
-                const item = e.target.closest('.odometer-item');
-                if (!item) return;
-                const w = wheels[unit];
-                if (!w) return;
-                const idx = w.items.indexOf(item);
-                if (idx >= 0) {
-                    w.el.scrollTo({ top: idx * ODOMETER_ITEM_HEIGHT, behavior: 'smooth' });
-                }
-            });
-        }
-
-        renderWheelItems('year', yearValues);
-        renderWheelItems('month', monthValues);
-        const initialMaxDay = daysInMonthOf(state.year, state.month);
-        renderWheelItems('day', Array.from({ length: initialMaxDay }, (_, i) => i + 1));
-        attachWheelEvents('year');
-        attachWheelEvents('month');
-        attachWheelEvents('day');
-        scrollToValue('year', state.year);
-        scrollToValue('month', state.month);
-        scrollToValue('day', state.day);
-        emitValue();
-
-        return {
-            reset(newInitial) {
-                state.year = newInitial.year;
-                state.month = newInitial.month;
-                state.day = newInitial.day;
-                const maxDay = daysInMonthOf(state.year, state.month);
-                if (state.day > maxDay) state.day = maxDay;
-                renderWheelItems('day', Array.from({ length: maxDay }, (_, i) => i + 1));
-                scrollToValue('year', state.year);
-                scrollToValue('month', state.month);
-                scrollToValue('day', state.day);
-                emitValue();
-            }
-        };
-    }
-
-    let dateOfAppointmentPickerInstance = null;
-    let lastPromotionDatePickerInstance = null;
-
-    function todayParts() {
+    function todayISO() {
         const now = new Date();
-        return { year: now.getFullYear(), month: now.getMonth() + 1, day: now.getDate() };
+        return `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`;
     }
 
-    function initOdometerPickers() {
-        const parts = todayParts();
-        dateOfAppointmentPickerInstance = createOdometerPicker('dateOfAppointmentPicker', 'dateOfAppointment', parts);
-        lastPromotionDatePickerInstance = createOdometerPicker('lastPromotionDatePicker', 'lastPromotionDate', parts);
+    function initDateInputs() {
+        document.getElementById('dateOfAppointment').value = todayISO();
+        document.getElementById('lastPromotionDate').value = todayISO();
     }
 
     const DEGREE_RANGES = {
@@ -813,19 +604,19 @@
         setTimeout(() => {
             const dateOfAppointmentInput = document.getElementById("dateOfAppointment").value.trim();
             const lastPromotionDateInput = document.getElementById("lastPromotionDate").value.trim();
-            const dateRegex = /^\d{4}\/\d{2}\/\d{2}$/;
+            const dateRegex = /^\d{4}-\d{2}-\d{2}$/;
             if (dateOfAppointmentInput && !dateRegex.test(dateOfAppointmentInput)) {
-                alert("صيغة تاريخ التعيين غير صحيحة. يجب أن تكون YYYY/MM/DD.");
+                alert("صيغة تاريخ التعيين غير صحيحة. يجب أن تكون YYYY-MM-DD.");
                 document.getElementById('loadingIndicator').style.display = 'none';
                 return;
             }
             if (lastPromotionDateInput && !dateRegex.test(lastPromotionDateInput)) {
-                alert("صيغة تاريخ آخر ترقية/علاوة غير صحيحة. يجب أن تكون YYYY/MM/DD.");
+                alert("صيغة تاريخ آخر ترقية/علاوة غير صحيحة. يجب أن تكون YYYY-MM-DD.");
                 document.getElementById('loadingIndicator').style.display = 'none';
                 return;
             }
-            const dateOfAppointment = dateOfAppointmentInput ? dateOfAppointmentInput.replace(/\//g, '-') : '';
-            const lastPromotionDate = lastPromotionDateInput ? lastPromotionDateInput.replace(/\//g, '-') : '';
+            const dateOfAppointment = dateOfAppointmentInput;
+            const lastPromotionDate = lastPromotionDateInput;
             const grade = document.getElementById("grade").value;
             const isLeadership = LEADERSHIP_GRADES.includes(grade);
             const stage = parseInt(document.getElementById("stage").value) || 1;
@@ -977,8 +768,7 @@
         document.getElementById("salaryForm").reset();
         document.getElementById("bonusMonths").value = 0;
         document.getElementById("overtimeHoursInput").value = "";
-        if (dateOfAppointmentPickerInstance) dateOfAppointmentPickerInstance.reset(todayParts());
-        if (lastPromotionDatePickerInstance) lastPromotionDatePickerInstance.reset(todayParts());
+        initDateInputs();
         document.getElementById("position").value = "none";
         document.getElementById("workShift").value = "morning";
         document.getElementById("shifts").value = "unauthorized";
@@ -994,7 +784,7 @@
     }
 
     document.addEventListener('DOMContentLoaded', () => {
-        initOdometerPickers();
+        initDateInputs();
         document.getElementById("social").addEventListener('change', toggleKids);
         document.getElementById("workShift").addEventListener('change', toggleShiftsAndOvertime);
         document.getElementById("calculateBtn").addEventListener('click', calculateAll);
