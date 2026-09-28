@@ -486,18 +486,6 @@ body{background:var(--bg);
       fin.setDate(fin.getDate()-og.d);
       $("rfinal").textContent=fd(fin);
       $("rfinald").textContent="بعد طرح: "+f(og);
-      /* المدة الأصغرية 4 سنوات للدرجات 10-6 ، والزائد عنها غبن وظيفي يُضاف للدرجة 5 */
-      if(grade>=6){
-        var floor=addMonths(d3,48);
-        if(fin<floor){
-          var gb=br(fin,floor);
-          $("rfinal").textContent=fd(floor);
-          $("rfinald").textContent="المدة الأصغرية 4 سنوات لا يمكن تجاوزها";
-          show(1,"الغبن الوظيفي (يُضاف للدرجة 5)",f(gb),"عدد الأيام: "+days(fin,floor));
-          show(2,"المرحلة في الدرجة 5",String(Math.min(6,1+gb.y)),"أول علاوة: "+fd(firstInc(floor,gb.m,gb.d))+(1+gb.y>6?" (الحد الأعلى 6)":""));
-          $("extra").classList.remove("hidden");
-        }
-      }
     }
     $("resultsCard").classList.remove("hidden");
   }
