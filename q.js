@@ -121,7 +121,7 @@ function renderSummary(due, upcoming, today) {
 
   document.getElementById('dNext').textContent = upcoming.length
     ? ' الترفيع القادم : ' + formatDate(upcoming[0].date) +
-      '- آخر ترفيع :      ' + formatDate(upcoming[upcoming.length - 1].date)
+      '-- آخر ترفيع :      ' + formatDate(upcoming[upcoming.length - 1].date)
     : 'تسريعك مكتمل';
 
   document.getElementById('today').textContent =
