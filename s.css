@@ -1,4 +1,4 @@
-    <style>
+<style>
         *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; font-family: var(--sans); }
         :root {
             --text: #1d1d1f;
@@ -106,7 +106,7 @@
         .details strong { font-size: 13px; font-weight: 600; color: var(--text-3); }
         .details span { font-weight: 600; margin: 0 4px; direction: ltr; display: inline-block; font-variant-numeric: tabular-nums; }
         .details ul { list-style: none; direction: rtl; text-align: center; padding: 0; margin: 0 0 14px; }
-
+        
         .details li:last-child { border-bottom: none; }
 
         .sig { text-align: center; font-size: 11px; color: var(--text-4); margin-top: 28px; }
@@ -134,3 +134,4 @@
             .details li { padding: 2px 0 !important; }
         }
     </style>
+
