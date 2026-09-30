@@ -89,7 +89,7 @@ style>
 
     .btn-col { display: flex; flex-direction: column; align-items: center; gap: 12px; }
 
-.btn
+.btngf
 {
       width: 100%;
       max-width: 210px;
@@ -107,7 +107,7 @@ user-select:none;
 transition:opacity .15s ease,transform .1s ease}
 
 
-    .bt {
+    .btn {
       width: 100%;
       max-width: 210px;
       padding: 10px 14px;
