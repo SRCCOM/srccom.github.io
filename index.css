@@ -91,14 +91,10 @@ style>
 
 .btngf
 {
-      width: 100%;
-      max-width: 210px;
-      padding: 10px 14px;
-      font-size:15px;
+     
       font-weight:600;
       color:var(--light-green-text);
       background:var(--light-green);
-      border:1px solid rgba(0,0,0,.16);
       border-radius:980px;
 cursor:pointer;
 -webkit-tap-highlight-color:transparent;
@@ -113,17 +109,15 @@ transition:opacity .15s ease,transform .1s ease}
       padding: 10px 14px;
       font: inherit;
       font-size: 14px;
-      border: 2px solid 
       color:var(--light-green-text);
-       rgba(0,0,0,.16);
       border-radius:980px;
       font-weight: 600;
       color: #fff;
       background: var(--green);
       border-radius: 980px;
       cursor: pointer;
-      -webkit-tap-highlight-color: transparent;
-      touch-action: manipulation;
+      -webkit-tap-highlight-color:transparent;
+touch-action: manipulation;
       transition: opacity .15s ease, transform .1s ease;
     }
     .btn:hover { opacity: .85; }
