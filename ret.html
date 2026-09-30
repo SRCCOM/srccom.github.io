@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>حاسبة الراتب التقاعدي</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Alan+Sans:wght@300..900&display=swap">
+<link rel="stylesheet" href="ret.css">
+</head>
+<body>
+<div class="wrap">
+  <header class="hero">
+    <h1>حاسبة الراتب التقاعدي</h1>
+    <p>تقدير الراتب الشهري ومكافأة نهاية الخدمة وحصة المستحقين للموظف المدني العادي</p>
+  </header>
+
+  <section class="card no-print-inputs">
+    <div class="card-head"><h2>أدخل بياناتك</h2></div>
+    <div class="f-row">
+      <div><div class="lb">مجموع الرواتب الإسمية لآخر 36 شهر مقسة على 36 </div><input class="in n" id="avg" type="number" inputmode="numeric" min="0" placeholder="1000000"></div>
+      <div class="f-2">
+        <div><div class="lb">آخر راتب اسمي</div><input class="in n" id="last" type="number" inputmode="numeric" min="0" placeholder="1000000"></div>
+        <div><div class="lb">مجموع المخصصات الأخيرة</div><input class="in n" id="allow" type="number" inputmode="numeric" min="0" placeholder="0"></div>
+      </div>
+    </div>
+
+    <div class="thanks f-row">
+      <div class="f-2">
+        <div><div class="lb">سنوات الخدمة</div><input class="in n" id="yrs" type="number" inputmode="numeric" min="0" max="45" placeholder="25"></div>
+        <div><div class="lb">أشهر إضافية</div><input class="in n" id="mon" type="number" inputmode="numeric" min="0" max="11" placeholder="0"></div>
+      </div>
+      <div><div class="lb">الشهادة</div>
+        <select class="in" id="cert">
+          <option value="0"selected>بدون شهادة</option>
+          <option value="5">دبلوم</option>
+          <option value="10" >باكلوريوس</option>
+          <option value="15">دبلوم عالي </option>
+          <option value="15">ماجستير</option>
+          <option value="20">دكتوراه</option>
+        </select></div>
+    </div>
+
+    <div class="thanks f-row">
+      <div><div class="lb">سبب الإحالة</div>
+        <select class="in" id="cs">
+          <option value="n">إحالة اعتيادية أو اختيارية</option>
+          <option value="a">إكمال السن القانوني</option>
+          <option value="h">أسباب صحية</option>
+        </select></div>
+      <div class="f-2">
+        <div><div class="lb">عدد المعالين</div><input class="in n" id="dep" type="number" inputmode="numeric" min="0" placeholder="0"></div>
+        <div><div class="lb">عدد المستحقين بعد الوفاة</div><input class="in n" id="heirs" type="number" inputmode="numeric" min="0" placeholder="0"></div>
+      </div>
+    </div>
+
+    <div class="btn-row"><button class="btn" id="go" type="button">احسب</button></div>
+    <div class="err" id="err" role="alert"></div>
+  </section>
+
+  <section class="card hidden" id="resultsCard">
+    <div class="card-head"><h2>النتيجة</h2></div>
+    <div class="res-row" id="resRow"></div>
+    <div class="short-line"></div>
+    <p class="sig" id="notes"></p>
+    <div class="btn-row no-print"><button class="btn secondary" id="print" type="button">طباعة النتيجة</button></div>
+  </section>
+
+  <p class="sig">تم الحساب على ضوء قانون التقاعد الموحد المعدل لسنة 2023</p>
+  
+</div>
+
+<script src="ret.js"></script>
+</body>
+</html>
