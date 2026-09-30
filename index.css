@@ -134,7 +134,8 @@ touch-action: manipulation;
 
     footer { text-align: center; padding-top: 12px; }
     .welcome { font-size: 14px; font-weight: 600; }
-    .clock { margin-top: 4px; font-size: 12px; color: var(--muted); font-variant-numeric: tabular-nums; }
+    .clock { margin-top: 4px; font-size: 12px; 
+color: var(--muted); font-variant-numeric: tabular-nums; }
 
     @media (max-height: 420px) {
       body { justify-content: flex-start; }
