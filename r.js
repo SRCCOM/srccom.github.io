@@ -108,3 +108,12 @@
     window.print();
   });
 })();
+
+    const clock = document.getElementById('clock');
+    const fmt = new Intl.DateTimeFormat('ar-u-ca-gregory', {
+      weekday: 'long', year: 'numeric', month: 'long', day: 'numeric',
+      hour: '2-digit', minute: '2-digit', second: '2-digit'
+    });
+    function tick() { clock.textContent = fmt.format(new Date()); }
+    tick();
+    setInterval(tick, 1000);
