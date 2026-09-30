@@ -1,0 +1,844 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+
+    <title> قصاصة الراتب </title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <link href="https://fonts.googleapis.com/css2?family=Alan+Sans:wght@300..900&family=Rubik:ital,wght@0,300..900;1,300..900&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
+<link rel="stylesheet" href="https:/srccom.github.io/s.css">
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+
+</head>
+<style>
+        *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; font-family: var(--sans); }
+        :root {
+            --text: #1d1d1f;
+            --text-2: #6e6e73;
+            --text-3: #86868b;
+            --text-4: #aeaeb2;
+            --border: #CCCCCC;
+            --surface: #fff;
+            --bg: #f5f5f7;
+            --accent: #0066cc;
+            --danger: #ff3b30;
+            --light-green: #00B295;
+            --light-green-text: #FFFFFF;
+            --sans: "Alan Sans", "SF Pro Text", "Segoe UI", Tahoma, Arial, sans-serif;
+            --shadow: 0 12px 32px rgba(0,0,0,.08), 0 2px 8px rgba(0,0,0,.04);
+            color-scheme: light;
+        }
+        :root {
+            box-sizing: border-box;
+            padding-top: env(safe-area-inset-top, 0px);
+            padding-bottom: env(safe-area-inset-bottom, 0px);
+        }
+        @media (prefers-color-scheme: dark) {
+            :root:not([data-theme="light"]) {
+                color-scheme: dark;
+                --text: #f5f5f7; --text-2: #a1a1a6; --text-3: #8e8e93; --text-4: #6e6e73;
+                --border: #38383a; --surface: #1c1c1e; --bg: #000;
+                --accent: #4da3ff; --danger: #ff6961;
+                --shadow: 0 12px 32px rgba(0,0,0,.55), 0 2px 8px rgba(0,0,0,.35);
+            }
+        }
+        :root[data-theme="dark"] {
+            color-scheme: dark;
+            --text: #f5f5f7; --text-2: #a1a1a6; --text-3: #8e8e93; --text-4: #6e6e73;
+            --border: #38383a; --surface: #1c1c1e; --bg: #000;
+            --accent: #4da3ff; --danger: #ff6961;
+            --shadow: 0 12px 32px rgba(0,0,0,.55), 0 2px 8px rgba(0,0,0,.35);
+        }
+        html { scroll-padding-top: env(safe-area-inset-top, 0px); }
+        body { background: var(--bg); color: var(--text); direction: rtl; -webkit-font-smoothing: antialiased; }
+        .hidden { display: none !important; }
+
+        .wrap { max-width: 820px; margin: 0 auto; padding: 24px 16px 48px; width: 100%; }
+
+        .hero { text-align: center; padding: 44px 16px 8px; }
+        .hero h1 { font-size: 30px; font-weight: 700; line-height: 1.25; margin-bottom: 10px; }
+        .print-only-header { display: none; text-align: center; font-size: 30px; font-weight: 700; line-height: 1.25; margin-bottom: 14px; }
+
+        .card {
+            max-width: 680px; width: 100%; margin: 22px auto 0; padding: 28px 24px;
+            background: var(--surface); border: 1px solid var(--border);
+            border-radius: 26px; box-shadow: var(--shadow);
+        }
+        .card-head { text-align: center; margin-bottom: 22px; }
+        .card-head h3 { font-size: 13px; font-weight: 600; color: var(--text-3); }
+
+        .f-row { display: flex; flex-direction: column; gap: 18px; width: 100%; margin-bottom: 6px; }
+        .form-group { width: 100%; min-width: 0; display: flex; flex-direction: column; }
+        .lb { font-size: 13px; color: var(--text-2); margin-bottom: 6px; min-height: 20px; line-height: 1.4; }
+
+        .in {
+            display: block; width: 100%; min-width: 0; max-width: 100%; margin: 0;
+            -webkit-appearance: none; appearance: none;
+            border: 1px solid var(--border); border-radius: 12px; padding: 11px 12px;
+            font-size: 15px; background: var(--bg); color: var(--text);
+            transition: border-color .15s ease, box-shadow .15s ease;
+        }
+        select.in {
+            background-image: url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%2386868b%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E');
+            background-repeat: no-repeat; background-position: left 12px center; background-size: 10px 10px;
+            padding-left: 32px;
+        }
+        .in:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 18%, transparent); }
+
+        .n { font-variant-numeric: tabular-nums; font-feature-settings: "tnum" 1; }
+
+        .btn-row { text-align: center; margin: 26px auto 0; max-width: 680px; display: flex; justify-content: center; gap: 12px; flex-wrap: wrap; }
+        .btn {
+            display: inline-block; font-size: 15px; font-weight: 600;
+            color: var(--light-green-text); background: var(--light-green);
+            border: 1px solid rgba(0,0,0,.16); border-radius: 980px; padding: 13px 44px;
+            cursor: pointer; -webkit-tap-highlight-color: transparent;
+            -webkit-user-select: none; user-select: none;
+            touch-action: manipulation; min-height: 44px; -webkit-touch-callout: none;
+            transition: opacity .15s ease, transform .1s ease;
+        }
+        @media (hover: hover) { .btn:hover { opacity: .85; } }
+        .btn:active { transform: scale(.97); opacity: .9; }
+        .btn:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+        .btn:disabled { opacity: .6; cursor: not-allowed; }
+        .btn.secondary { background: var(--accent); }
+        .btn.neutral { background: var(--surface); color: var(--text-2); border: 1px solid var(--border); }
+        #printRow { margin-top: 0; }
+        #printBtn { display: none; margin-top: 26px; }
+
+        .loading-indicator { display: none; text-align: center; margin: 20px 0; padding: 14px 18px; background: var(--bg); border-radius: 16px; font-size: 15px; font-weight: 600; color: var(--text-2); }
+        .loading-indicator i { font-size: 18px; color: var(--accent); margin-left: 10px; animation: spin 1.5s linear infinite; }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+
+        /* Results card: shown only when at least one result block is visible */
+        .result-card:not(:has(> .result:not(.hidden), > .details:not(.hidden))) { display: none; }
+        .result { border-radius: 16px; padding: 14px 18px; text-align: center; width: 100%; margin-bottom: 12px; background: var(--bg); font-size: 19px; font-weight: 600; line-height: 1.35; color: var(--text); }
+        .result span { font-weight: 600; color: var(--light-green); margin: 0 4px; direction: ltr; display: inline-block; }
+        #serviceDuration { font-size: 15px; color: var(--text-2); }
+        .details { border-radius: 16px; padding: 14px 18px; width: 100%; background: var(--bg); font-size: 15px; font-weight: 500; line-height: 1.8; color: var(--text); text-align: center; }
+        .details h4 { font-size: 13px; font-weight: 600; color: var(--text-3); margin: 6px 0 6px; line-height: 1.4; }
+        .details hr { border: none; border-top: 1px solid var(--border) !important; margin: 6px 0 10px !important; }
+        .details strong { font-size: 13px; font-weight: 600; color: var(--text-3); }
+        .details span { font-weight: 600; margin: 0 4px; direction: ltr; display: inline-block; font-variant-numeric: tabular-nums; }
+        .details ul { list-style: none; direction: rtl; text-align: center; padding: 0; margin: 0 0 14px; }
+
+        .details li:last-child { border-bottom: none; }
+
+        .sig { text-align: center; font-size: 14px; color: var(--text-4); margin-top: 28px; }
+
+    footer { text-align: center; padding-top: 12px; }
+    .welcome { font-size: 14px; font-weight: 600; }
+    .clock { margin-top: 4px; font-size: 12px; color: var(--muted); font-variant-numeric: tabular-nums; }
+
+        @media (max-width: 600px) {
+            .wrap { padding: 16px 12px 32px; }
+            .card { padding: 22px 14px; }
+            .f-row { gap: 14px; }
+            .btn { padding: 13px 32px; }
+        }
+        @media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+
+        @page { size: A4; margin: 10mm; }
+        @media print {
+            * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+            :root:root:root {
+                color-scheme: light;
+                --text: #1d1d1f; --text-2: #6e6e73; --text-3: #86868b;
+                --border: #CCCCCC; --surface: #fff; --bg: #f5f5f7;
+            }
+            html, body { background: #fff !important; }
+            body { background-color: var(--surface) !important; }
+            .hero, .no-print, .btn-row, .loading-indicator, .sig { display: none !important; }
+            .card:not(.result-card) { display: none !important; }
+            .wrap { padding-top: 0 !important; max-width: 100% !important; }
+            .print-only-header { display: block !important; }
+            .card { box-shadow: none !important; border: 1px solid var(--border) !important; margin-top: 0 !important; max-width: 100% !important; }
+            .result-card { break-inside: avoid; page-break-inside: avoid; }
+            .card-head { display: none; }
+            .result { padding: 10px 14px !important; margin-bottom: 10px !important; page-break-inside: avoid; }
+            .details { padding: 14px 18px !important; line-height: 1.5 !important; page-break-inside: avoid; }
+            .details li { padding: 2px 0 !important; }
+        }
+    </style>
+
+
+<body>
+
+<div class="wrap">
+    <header class="hero no-print">
+        <h1>قصاصة الراتب</h1>
+    </header>
+    <div class="print-only-header">قصاصة الراتب</div>
+
+    <form id="salaryForm" class="no-print">
+        <section class="card">
+            <div class="card-head"><h3>العلاوة والترفيع</h3></div>
+            <div class="f-row">
+                <div class="form-group">
+                    <label class="lb" for="dateOfAppointment">تاريخ التعيين</label>
+                    <input class="in n" type="date" id="dateOfAppointment" name="dateOfAppointment">
+                </div>
+                <div class="form-group">
+                    <label class="lb" for="lastPromotionDate">تاريخ آخر ترفيع</label>
+                    <input class="in n" type="date" id="lastPromotionDate" name="lastPromotionDate">
+                </div>
+                <div class="form-group">
+                    <label class="lb" for="degreeType">الشهادة</label>
+                    <select class="in" id="degreeType" name="degreeType">
+                        <option value="primary">ابتدائية</option>
+                        <option value="preparatory">إعدادية</option>
+                        <option value="diploma">دبلوم</option>
+                        <option value="bachelor" selected>بكلوريوس</option>
+                        <option value="master">ماجستير</option>
+                        <option value="phd">دكتوراه</option>
+                    </select>
+                </div>
+            </div>
+        </section>
+
+        <section class="card">
+            <div class="card-head"><h3>نظام العمل</h3></div>
+            <div class="f-row">
+                <div class="form-group">
+                    <label class="lb" for="workType">موقع العمل</label>
+                    <select class="in" id="workType" name="workType">
+                        <option value="field" selected>فني</option>
+                        <option value="admin">إداري</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label class="lb" for="workShift">اوقات الدوام</label>
+                    <select class="in" id="workShift" name="workShift">
+                        <option value="morning" selected>صباحي</option>
+                        <option value="shift">مناوب</option>
+                    </select>
+                </div>
+                <div id="overtimeHoursBox" class="form-group">
+                    <label class="lb" for="overtimeHoursInput">عدد الساعات الإضافية</label>
+                    <input class="in" type="number" id="overtimeHoursInput" name="overtimeHoursInput" min="0" value="" placeholder="أدخل عدد الساعات">
+                </div>
+                <div id="shiftsBox" class="form-group hidden">
+                    <label class="lb" for="shifts">رصيد الاجازات</label>
+                    <select class="in" id="shifts" name="shifts">
+                        <option value="unauthorized" selected>غير مجاز</option>
+                        <option value="authorized">مجاز</option>
+                    </select>
+                </div>
+            </div>
+        </section>
+
+        <section class="card">
+            <div class="card-head"><h3>الدرجة والمرحلة</h3></div>
+            <div class="f-row">
+                <div class="form-group" id="positionBox">
+                    <label class="lb" for="position">المنصب</label>
+                    <select class="in" id="position" name="position">
+                        <option value="none" selected>لا يوجد</option>
+                        <option value="section-head">مسؤول شعبة</option>
+                        <option value="department-head">مسؤول قسم</option>
+                        <option value="director">مدير هيئة / معاون مدير / مدير عام</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label class="lb" for="grade">الدرجة الحالية</label>
+                    <select class="in" id="grade" name="grade">
+                        <option value="10" selected>10</option>
+                        <option value="9">9</option>
+                        <option value="8">8</option>
+                        <option value="7">7</option>
+                        <option value="6">6</option>
+                        <option value="5">5</option>
+                        <option value="4">4</option>
+                        <option value="3">3</option>
+                        <option value="2">2</option>
+                        <option value="1">1</option>
+                    </select>
+                </div>
+                <div class="form-group" id="stageBox">
+                    <label class="lb" for="stage">المرحلة الحالية</label>
+                    <select class="in" id="stage" name="stage">
+                        <option value="1" selected>1</option>
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                        <option value="4">4</option>
+                        <option value="5">5</option>
+                        <option value="6">6</option>
+                        <option value="7">7</option>
+                        <option value="8">8</option>
+                        <option value="9">9</option>
+                        <option value="10">10</option>
+                        <option value="11">11</option>
+                    </select>
+                </div>
+            </div>
+        </section>
+
+        <section class="card">
+            <div class="card-head"><h3>المخصصات والإضافات</h3></div>
+            <div class="f-row">
+                <div class="form-group">
+                    <label class="lb" for="social">الحالة الاجتماعية</label>
+                    <select class="in" id="social" name="social">
+                        <option value="single" selected>غير متزوج</option>
+                        <option value="married">متزوج</option>
+                    </select>
+                </div>
+                <div id="kidsBox" class="form-group hidden">
+                    <label class="lb" for="kids">عدد الأطفال</label>
+                    <select class="in" id="kids" name="kids">
+                        <option value="0" selected>0</option>
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                        <option value="4">4</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label class="lb" for="bonusMonths">عدد أشهر القدم</label>
+                    <input class="in" type="number" id="bonusMonths" name="bonusMonths" value="0" min="0" placeholder="أدخل عدد الأشهر">
+                </div>
+            </div>
+        </section>
+
+        <div id="loadingIndicator" class="loading-indicator hidden">
+            <i class="fas fa-spinner"></i> جاري حساب الراتب...
+        </div>
+        <div class="btn-row">
+            <button type="button" class="btn" id="calculateBtn">حساب قصاصتك</button>
+        </div>
+    </form>
+
+    <section class="card result-card">
+        <div class="card-head"><h3>النتيجة</h3></div>
+        <div id="salaryResult" class="result hidden"></div>
+        <div id="serviceDuration" class="result hidden"></div>
+        <div id="detailsBox" class="details hidden"></div>
+    </section>
+
+    <div class="btn-row no-print" id="printRow">
+        <button type="button" class="btn secondary" id="printBtn">حفظ النتائج</button>
+    </div>
+
+      <footer>
+
+    <p class="sig" id="clock" dir="rtl"></p>
+
+    </footer>
+
+</div>
+ <script>
+     
+     const gradeBase = {
+        10: 170000, 9: 185000, 8: 260000, 7: 296000, 6: 362000, 5: 429000, 4: 509000, 3: 600000, 2: 723000, 1: 910000
+    };
+    const LEADERSHIP_GRADES = ['GM', 'SP', 'UM'];
+    const stageAddLogic = (grade) => {
+        const defaultAdd = {
+            10: 3000, 9: 5000, 8: 3000, 7: 6000, 6: 6000, 5: 6000, 4: 8000, 3: 10000, 2: 17000, 1: 20000
+        };
+        if (LEADERSHIP_GRADES.includes(grade)) {
+            return 83000;
+        }
+        return defaultAdd[grade] || 0;
+    };
+    const gradeMaxNominal = {
+        10: 200000, 9: 240000
+    };
+    const DEDUCTIONS = {
+        HEALTH_INSURANCE: 00000,
+        SOCIAL_SOLIDARITY: 2000,
+        CHILD_HOSPITAL_SUPPORT: 1000,
+        PREVIOUS_DEDUCTION: 1950
+    };
+    const POSITION_DEDUCTIONS = {
+        'section-head': 0.15,
+        'department-head': 0.20,
+        'director': 0.30
+    };
+    const OVERTIME_RATES = {
+        'high_grade': 5000,
+        'low_grade': 4000,
+        'leadership': 5000
+    };
+    const LOCATION_FIXED_BONUS = 50000;
+
+    function formatDate(dateObj) {
+        if (!(dateObj instanceof Date) || isNaN(dateObj)) return "غير محدد";
+        const year = dateObj.getFullYear();
+        const month = String(dateObj.getMonth() + 1).padStart(2, '0');
+        const day = String(dateObj.getDate()).padStart(2, '0');
+        return `${year}/${month}/${day}`;
+    }
+
+    function calculatePromotions(lastPromotionDate, currentGrade, currentStage, bonusMonths) {
+        if (!lastPromotionDate) return null;
+        const lastDate = new Date(lastPromotionDate);
+        const today = new Date();
+        today.setHours(0, 0, 0, 0);
+        if (LEADERSHIP_GRADES.includes(currentGrade)) {
+            return {
+                type: 'leadership',
+                message: 'درجة قيادية - لا توجد ترقية أو علاوة سنوية تلقائية'
+            };
+        }
+        const gradeNumber = parseInt(currentGrade);
+        let originalYears = 0;
+        let nextGrade = currentGrade;
+        let nextStage = 1;
+        let nextPromotionDate = null;
+        if (gradeNumber >= 6 && gradeNumber <= 10) {
+            originalYears = 5;
+            nextGrade = gradeNumber > 6 ? (gradeNumber - 1).toString() : "5";
+        } else if (gradeNumber >= 1 && gradeNumber <= 5) {
+            originalYears = 6;
+            nextGrade = gradeNumber > 1 ? (gradeNumber - 1).toString() : "GM";
+        }
+        const effectiveYears = originalYears - (currentStage - 1);
+        let promotionOverdueYears = 0;
+        if (originalYears > 0) {
+            if (effectiveYears <= 0) {
+                promotionOverdueYears = Math.round(-effectiveYears);
+            }
+            nextPromotionDate = new Date(lastDate);
+            const totalMonthsToWait = Math.round(effectiveYears * 12);
+            nextPromotionDate.setMonth(nextPromotionDate.getMonth() + totalMonthsToWait);
+            nextPromotionDate.setMonth(nextPromotionDate.getMonth() - bonusMonths);
+            nextPromotionDate.setHours(0, 0, 0, 0);
+        }
+        let nextAnnualIncreaseDate = new Date(lastDate);
+        nextAnnualIncreaseDate.setFullYear(nextAnnualIncreaseDate.getFullYear() + 1);
+        nextAnnualIncreaseDate.setMonth(nextAnnualIncreaseDate.getMonth() - bonusMonths);
+        nextAnnualIncreaseDate.setHours(0, 0, 0, 0);
+        while (nextAnnualIncreaseDate.getTime() < today.getTime()) {
+            nextAnnualIncreaseDate.setFullYear(nextAnnualIncreaseDate.getFullYear() + 1);
+        }
+        const annualTimeDiff = nextAnnualIncreaseDate.getTime() - today.getTime();
+        const annualDaysDiff = Math.ceil(annualTimeDiff / (1000 * 3600 * 24));
+        let annualStatus = 'متبقي';
+        if (annualDaysDiff <= 0) {
+            annualStatus = 'مستحقة الآن';
+        }
+        let promotionStatus = 'غير متاحة';
+        let promotionDaysDiff = 0;
+        if (nextPromotionDate) {
+            const promotionTimeDiff = nextPromotionDate.getTime() - today.getTime();
+            promotionDaysDiff = Math.ceil(promotionTimeDiff / (1000 * 3600 * 24));
+            promotionStatus = 'متبقي';
+            if (promotionDaysDiff <= 0) {
+                promotionStatus = 'مستحقة الآن';
+            }
+        }
+        return {
+            type: 'regular',
+            originalYears,
+            bonusMonths,
+            nextAnnualIncreaseDate: nextAnnualIncreaseDate,
+            annualStatus: annualStatus,
+            annualDaysRemaining: annualDaysDiff,
+            nextPromotionDate: nextPromotionDate,
+            promotionStatus: promotionStatus,
+            promotionDaysRemaining: promotionDaysDiff,
+            yearsToPromotion: effectiveYears,
+            promotionOverdueYears: promotionOverdueYears,
+            nextGrade: nextGrade,
+            nextStage: nextStage,
+            currentStage: currentStage
+        };
+    }
+
+    function getRatePerHoure(grade) {
+        if (parseInt(grade) >= 5 && parseInt(grade) <= 10) {
+            return OVERTIME_RATES.low_grade;
+        } else if (parseInt(grade) >= 1 && parseInt(grade) <= 4) {
+            return OVERTIME_RATES.high_grade;
+        } else if (LEADERSHIP_GRADES.includes(grade)) {
+            return OVERTIME_RATES.leadership;
+        }
+        return 0;
+    }
+
+    function calculateFullSalary(targetGrade, targetStage, degree, workType, social, kids, positionFactor, bonusMonths, workShift, overtimeHoursInput, shifts) {
+        const stageIncrement = stageAddLogic(targetGrade);
+        let nominal = gradeBase[targetGrade] + ((targetStage - 1) * stageIncrement);
+        if (gradeMaxNominal[targetGrade] && nominal > gradeMaxNominal[targetGrade]) {
+            nominal = gradeMaxNominal[targetGrade];
+        }
+        let certFactor;
+        switch (degree) {
+            case 'primary': certFactor = 0.20; break;
+            case 'preparatory': certFactor = 0.25; break;
+            case 'diploma': certFactor = 0.35; break;
+            case 'bachelor': certFactor = 0.45; break;
+            case 'master': certFactor = 0.65; break;
+            case 'phd': certFactor = 0.75; break;
+            default: certFactor = 0;
+        }
+        const riskFactor = workType === 'field' ? 0.3 : 0.25;
+        let conditionalFactor = 0;
+        if (degree !== 'diploma' && degree !== 'primary' && degree !== 'preparatory') {
+            conditionalFactor = workType === 'field' ? 0.50 : 0.35;
+        }
+        const fixedOtherAllowanceFactor = 0.3;
+        const totalFactors = certFactor + riskFactor + conditionalFactor + fixedOtherAllowanceFactor;
+        const factoredAllowance = Math.round(nominal * totalFactors);
+        let familyAllowance = 0;
+        if (social === "married") {
+            familyAllowance = 50000 + kids * 10000;
+        }
+        const responsibilityAllowance = Math.round(nominal * positionFactor);
+        const bonusAmount = 0;
+        let specialAllowance = 0;
+        let specialAllowanceDetails = { type: 'None', hours: 0, rate: 0, shiftList: '' };
+        const ratePerHoure = getRatePerHoure(targetGrade);
+        if (workShift === 'morning' && overtimeHoursInput > 0) {
+            specialAllowance = overtimeHoursInput * ratePerHoure;
+            specialAllowanceDetails.type = 'Overtime';
+            specialAllowanceDetails.hours = overtimeHoursInput;
+            specialAllowanceDetails.rate = ratePerHoure;
+        } else if (workShift === 'shift') {
+            let hours = 0;
+            const shiftRate = 4000;
+            if (shifts === 'authorized') {
+                hours = 22.5;
+            } else {
+                hours = 26;
+            }
+            specialAllowance = hours * shiftRate;
+            specialAllowanceDetails.type = 'Shift';
+            specialAllowanceDetails.hours = hours;
+            specialAllowanceDetails.rate = shiftRate;
+            specialAllowanceDetails.shiftList = shifts === 'authorized' ? 'مجاز' : 'غير مجاز';
+        }
+        const retirement = Math.round(0.1 * nominal);
+        const fixedDeductions = DEDUCTIONS.HEALTH_INSURANCE + DEDUCTIONS.SOCIAL_SOLIDARITY + DEDUCTIONS.CHILD_HOSPITAL_SUPPORT + DEDUCTIONS.PREVIOUS_DEDUCTION;
+        const totalDeductions = retirement + fixedDeductions;
+        const grossBeforeDeductions = nominal + factoredAllowance + familyAllowance + responsibilityAllowance + specialAllowance;
+        const netAfterDeductions = grossBeforeDeductions - totalDeductions;
+        const totalSalary = netAfterDeductions + LOCATION_FIXED_BONUS;
+        return { nominal, totalSalary, responsibilityAllowance, totalDeductions, bonusAmount, factoredAllowance, specialAllowance, specialAllowanceDetails };
+    }
+
+    function calculateServiceDuration(startDate) {
+        if (!startDate) return null;
+        const start = new Date(startDate);
+        const now = new Date();
+        let years = now.getFullYear() - start.getFullYear();
+        let months = now.getMonth() - start.getMonth();
+        let days = now.getDate() - start.getDate();
+        if (days < 0) {
+            months--;
+            const daysInPreviousMonth = new Date(now.getFullYear(), now.getMonth(), 0).getDate();
+            days += daysInPreviousMonth;
+        }
+        if (months < 0) {
+            years--;
+            months += 12;
+        }
+        if (years < 0) {
+            return "تاريخ تعيين غير صحيح";
+        }
+        return { years, months, days };
+    }
+
+    function todayISO() {
+        const now = new Date();
+        return `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`;
+    }
+
+    function initDateInputs() {
+        document.getElementById('dateOfAppointment').value = todayISO();
+        document.getElementById('lastPromotionDate').value = todayISO();
+    }
+
+    const DEGREE_RANGES = {
+        'primary': { min: 10, max: 3 },
+        'preparatory': { min: 10, max: 2 },
+        'diploma': { min: 8, max: 1 },
+        'bachelor': { min: 7, max: 1 },
+        'master': { min: 7, max: 1 },
+        'phd': { min: 7, max: 1 }
+    };
+
+    const LEADERSHIP_OPTIONS = [
+        { value: 'GM', text: 'المدير العام ومن بدرجته' },
+        { value: 'SP', text: 'الدرجة الخاصة' },
+        { value: 'UM', text: 'وكيل وزارة ومن بدرجته' }
+    ];
+
+    function updateGradeOptions() {
+        const degree = document.getElementById('degreeType').value;
+        const position = document.getElementById('position').value;
+        const gradeSelect = document.getElementById('grade');
+        const currentGrade = gradeSelect.value;
+        gradeSelect.innerHTML = '';
+        const range = DEGREE_RANGES[degree];
+        if (!range) return;
+        for (let g = range.min; g >= range.max; g--) {
+            const option = document.createElement('option');
+            option.value = String(g);
+            option.textContent = String(g);
+            gradeSelect.appendChild(option);
+        }
+        if (position !== 'none') {
+            LEADERSHIP_OPTIONS.forEach(opt => {
+                const option = document.createElement('option');
+                option.value = opt.value;
+                option.textContent = opt.text;
+                gradeSelect.appendChild(option);
+            });
+        }
+        const availableValues = Array.from(gradeSelect.options).map(o => o.value);
+        if (availableValues.includes(currentGrade)) {
+            gradeSelect.value = currentGrade;
+        } else {
+            gradeSelect.value = String(range.min);
+        }
+        updateStageVisibility();
+    }
+
+    function updateStageVisibility() {
+        const grade = document.getElementById('grade').value;
+        const stageBox = document.getElementById('stageBox');
+        if (LEADERSHIP_GRADES.includes(grade)) {
+            stageBox.classList.add('hidden');
+        } else {
+            stageBox.classList.remove('hidden');
+        }
+    }
+
+    function toggleKids() {
+        document.getElementById("kidsBox").classList.toggle(
+            "hidden",
+            document.getElementById("social").value !== "married"
+        );
+    }
+
+    function toggleShiftsAndOvertime() {
+        const workShift = document.getElementById("workShift").value;
+        document.getElementById("overtimeHoursBox").classList.toggle("hidden", workShift !== 'morning');
+        document.getElementById("shiftsBox").classList.toggle("hidden", workShift !== 'shift');
+    }
+
+    function calculateAll() {
+        document.getElementById('loadingIndicator').style.display = 'block';
+        document.querySelectorAll('.result').forEach(el => el.classList.add('hidden'));
+        document.getElementById("detailsBox").classList.add('hidden');
+        document.getElementById("printBtn").style.display = 'none';
+        setTimeout(() => {
+            const dateOfAppointmentInput = document.getElementById("dateOfAppointment").value.trim();
+            const lastPromotionDateInput = document.getElementById("lastPromotionDate").value.trim();
+            const dateRegex = /^\d{4}-\d{2}-\d{2}$/;
+            if (dateOfAppointmentInput && !dateRegex.test(dateOfAppointmentInput)) {
+                alert("صيغة تاريخ التعيين غير صحيحة. يجب أن تكون YYYY-MM-DD.");
+                document.getElementById('loadingIndicator').style.display = 'none';
+                return;
+            }
+            if (lastPromotionDateInput && !dateRegex.test(lastPromotionDateInput)) {
+                alert("صيغة تاريخ آخر ترقية/علاوة غير صحيحة. يجب أن تكون YYYY-MM-DD.");
+                document.getElementById('loadingIndicator').style.display = 'none';
+                return;
+            }
+            const dateOfAppointment = dateOfAppointmentInput;
+            const lastPromotionDate = lastPromotionDateInput;
+            const grade = document.getElementById("grade").value;
+            const isLeadership = LEADERSHIP_GRADES.includes(grade);
+            const stage = parseInt(document.getElementById("stage").value) || 1;
+            const degree = document.getElementById("degreeType").value;
+            const workType = document.getElementById("workType").value;
+            const social = document.getElementById("social").value;
+            const kids = parseInt(document.getElementById("kids").value) || 0;
+            const bonusMonths = parseInt(document.getElementById("bonusMonths").value) || 0;
+            const workShift = document.getElementById("workShift").value;
+            const overtimeHoursInput = parseInt(document.getElementById("overtimeHoursInput").value) || 0;
+            const shifts = document.getElementById("shifts").value;
+            let positionFactor = 0;
+            const position = document.getElementById("position").value;
+            if (grade === 'GM') {
+                positionFactor = 0.30;
+            } else if (grade === 'SP' || grade === 'UM') {
+                positionFactor = 0;
+            } else {
+                positionFactor = POSITION_DEDUCTIONS[position] || 0;
+            }
+            const { nominal: currentNominal, totalSalary: currentTotalSalary, responsibilityAllowance, totalDeductions, bonusAmount, factoredAllowance, specialAllowance, specialAllowanceDetails } =
+                calculateFullSalary(grade, stage, degree, workType, social, kids, positionFactor, bonusMonths, workShift, overtimeHoursInput, shifts);
+            document.getElementById("salaryResult").classList.remove('hidden');
+            document.getElementById("salaryResult").innerHTML =
+                "الراتب الصافي: <span>" + currentTotalSalary.toLocaleString() + "</span> دينار";
+            const service = calculateServiceDuration(dateOfAppointment);
+            const serviceElement = document.getElementById("serviceDuration");
+            if (service && typeof service !== 'string') {
+                serviceElement.innerHTML =
+                    ` خدمة فعلية:
+                    ${service.years} سنة/ ${service.months} شهر/ ${service.days} يوم `;
+                serviceElement.classList.remove('hidden');
+            } else if (typeof service === 'string') {
+                alert(service);
+            }
+            const promotionInfo = lastPromotionDate ? calculatePromotions(lastPromotionDate, grade, stage, bonusMonths) : null;
+            const degreeText = document.getElementById("degreeType").selectedOptions[0].textContent;
+            const gradeText = document.getElementById("grade").selectedOptions[0].textContent;
+            const formattedDate = dateOfAppointment ? formatDate(new Date(dateOfAppointment)) : "غير مُدخل";
+            const formattedLastPromotionDate = lastPromotionDate ? formatDate(new Date(lastPromotionDate)) : "غير مُدخل";
+            let positionText;
+            if (isLeadership) {
+                positionText = gradeText;
+            } else {
+                positionText = document.getElementById("position").selectedOptions[0].textContent;
+            }
+            const workTypeText = document.getElementById("workType").selectedOptions[0].textContent;
+            const gradeStageText = `${gradeText} - المرحلة ${stage}`;
+            let certFactor = 0;
+            switch (degree) {
+                case 'primary': certFactor = 0.20; break;
+                case 'preparatory': certFactor = 0.25; break;
+                case 'diploma': certFactor = 0.35; break;
+                case 'bachelor': certFactor = 0.45; break;
+                case 'master': certFactor = 0.65; break;
+                case 'phd': certFactor = 0.75; break;
+                default: certFactor = 0;
+            }
+            let riskFactor = workType === 'field' ? 0.3 : 0.25;
+            let conditionalFactor = 0;
+            if (degree !== 'diploma' && degree !== 'primary' && degree !== 'preparatory') {
+                conditionalFactor = workType === 'field' ? 0.50 : 0.35;
+            }
+            let fixedOtherAllowanceFactor = 0.3;
+            const certAmount = Math.round(currentNominal * certFactor);
+            const riskAmount = Math.round(currentNominal * riskFactor);
+            const otherFixedAmount = Math.round(currentNominal * fixedOtherAllowanceFactor);
+            const conditionalAmount = Math.round(currentNominal * conditionalFactor);
+            let familyAllowance = social === "married" ? (50000 + kids * 10000) : 0;
+            const grossSalary = currentTotalSalary + totalDeductions;
+            let nextAnnualDateText = "غير مُدخل";
+            let annualStatusDisplay = "غير مُدخل";
+            let nextPromotionDateText = "غير مُدخل";
+            let promotionStatusDisplay = "غير مُدخل";
+            if (promotionInfo) {
+                if (promotionInfo.type === 'leadership') {
+                    nextAnnualDateText = "لا يوجد";
+                    annualStatusDisplay = "درجة قيادية";
+                    nextPromotionDateText = "لا يوجد";
+                    promotionStatusDisplay = "درجة قيادية";
+                } else {
+                    nextAnnualDateText = formatDate(promotionInfo.nextAnnualIncreaseDate);
+                    if (promotionInfo.annualStatus === 'مستحقة الآن') {
+                        annualStatusDisplay = "مستحقة الآن";
+                    } else {
+                        annualStatusDisplay = `${promotionInfo.annualStatus} (${promotionInfo.annualDaysRemaining} يوم)`;
+                    }
+                    if (promotionInfo.nextPromotionDate) {
+                        nextPromotionDateText = formatDate(promotionInfo.nextPromotionDate);
+                        if (promotionInfo.promotionOverdueYears > 0) {
+                            promotionStatusDisplay = `مستحق ترقية منذ ${promotionInfo.promotionOverdueYears} سنة`;
+                        } else if (promotionInfo.promotionStatus === 'مستحقة الآن') {
+                            promotionStatusDisplay = "مستحقة الآن";
+                        } else {
+                            promotionStatusDisplay = `${promotionInfo.promotionStatus} (${promotionInfo.promotionDaysRemaining} يوم )`;
+                        }
+                    } else {
+                        nextPromotionDateText = "لا يوجد";
+                        promotionStatusDisplay = "لا يوجد";
+                    }
+                }
+            }
+            document.getElementById("detailsBox").innerHTML =
+                "<h4>معلومات الموظف</h4>" +
+                "<hr style='margin: 5px 0 12px 0; border-top: 1px dashed #ccc;'>" +
+                "<ul>" +
+                    `<li>تاريخ التعيين: <span>${formattedDate}</span></li>` +
+                    `<li>تاريخ آخر ترفيع: <span>${formattedLastPromotionDate}</span></li>` +
+                    `<li>الترفيع القادم: <span>${nextPromotionDateText}</span></li>` +
+                    `<li>حالة الترفيع: <span>${promotionStatusDisplay}</span></li>` +
+                    `<li>العلاوة القادمة: <span>${nextAnnualDateText}</span></li>` +
+                    `<li>حالة العلاوة: <span>${annualStatusDisplay}</span></li>` +
+                    `<li>موقع العمل: <span>${workTypeText}</span></li>` +
+                    `<li>الشهادة: <span>${degreeText}</span></li>` +
+                    `<li>الدرجة والمرحلة: <span>${gradeStageText}</span></li>` +
+                    `<li>المسؤولية: <span>${positionText}</span></li>` +
+                "</ul>" +
+                "<h4>مخصصات الراتب</h4>" +
+                "<hr style='margin: 5px 0 12px 0; border-top: 1px dashed #ccc;'>" +
+                "<ul>" +
+                    `<li>الراتب الإسمي: <span>${currentNominal.toLocaleString()}</span> دينار</li>` +
+                    `<li>م. شهادة: <span>${certAmount.toLocaleString()}</span> دينار</li>` +
+                    `<li>م. خطورة: <span>${riskAmount.toLocaleString()}</span> دينار</li>` +
+                    `<li>م. ثابت: <span>${otherFixedAmount.toLocaleString()}</span> دينار</li>` +
+                    `<li>م. هندسية: <span>${conditionalAmount.toLocaleString()}</span> دينار</li>` +
+                    `<li>م. زوجية وأطفال: <span>${familyAllowance.toLocaleString()}</span> دينار</li>` +
+                    `<li>م. موقعية: <span>${LOCATION_FIXED_BONUS.toLocaleString()}</span> دينار</li>` +
+                    `<li>م. ساعات اضافية: <span>${specialAllowance.toLocaleString()}</span> دينار</li>` +
+                "</ul>" +
+                "<hr style='margin: 8px 0; border-top: 1px dashed #ccc;'>" +
+                "<strong>الراتب الكلي:</strong> <span>" + grossSalary.toLocaleString() + "</span> دينار<br>" +
+                "<strong>الاستقطاعات:</strong> <span>" + totalDeductions.toLocaleString() + "</span> دينار<br>" +
+                "<strong>الراتب الصافي:</strong> <span>" + currentTotalSalary.toLocaleString() + "</span> دينار";
+            document.getElementById("detailsBox").classList.remove('hidden');
+            document.getElementById("printBtn").style.display = 'inline-block';
+            document.getElementById('loadingIndicator').style.display = 'none';
+        }, 800);
+    }
+
+    function printResults() {
+        if (document.getElementById("salaryResult").classList.contains('hidden')) {
+            alert("يرجى إجراء عملية الحساب أولاً قبل محاولة الطباعة.");
+            return;
+        }
+        window.print();
+    }
+
+    function resetForm() {
+        document.getElementById("salaryForm").reset();
+        document.getElementById("bonusMonths").value = 0;
+        document.getElementById("overtimeHoursInput").value = "";
+        initDateInputs();
+        document.getElementById("position").value = "none";
+        document.getElementById("workShift").value = "morning";
+        document.getElementById("shifts").value = "unauthorized";
+        document.getElementById("grade").value = "10";
+        document.getElementById("stage").value = "1";
+        document.getElementById("kidsBox").classList.add('hidden');
+        toggleShiftsAndOvertime();
+        document.getElementById("printBtn").style.display = 'none';
+        document.getElementById('loadingIndicator').style.display = 'none';
+        document.querySelectorAll('.result').forEach(el => el.classList.add('hidden'));
+        document.getElementById("detailsBox").classList.add('hidden');
+        updateGradeOptions();
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+        initDateInputs();
+        document.getElementById("social").addEventListener('change', toggleKids);
+        document.getElementById("workShift").addEventListener('change', toggleShiftsAndOvertime);
+        document.getElementById("calculateBtn").addEventListener('click', calculateAll);
+        const resetBtn = document.getElementById("resetBtn");
+        if (resetBtn) resetBtn.addEventListener('click', resetForm);
+        document.getElementById("printBtn").addEventListener('click', printResults);
+        document.getElementById("degreeType").addEventListener('change', updateGradeOptions);
+        document.getElementById("position").addEventListener('change', updateGradeOptions);
+        document.getElementById("grade").addEventListener('change', updateStageVisibility);
+        toggleKids();
+        toggleShiftsAndOvertime();
+        updateGradeOptions();
+    });
+
+    const clock = document.getElementById('clock');
+    const fmt = new Intl.DateTimeFormat('ar-u-ca-gregory', {
+      weekday: 'long', year: 'numeric', month: 'long', day: 'numeric',
+      hour: '2-digit', minute: '2-digit', second: '2-digit'
+    });
+    function tick() { clock.textContent = fmt.format(new Date()); }
+    tick();
+    setInterval(tick, 1000);
+ </script>
+</body>
+</html>
