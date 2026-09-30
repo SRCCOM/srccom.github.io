@@ -32,7 +32,7 @@ $('go').addEventListener('click',()=>{
     if(special)notes.push('تم تطبيق قانون التقاعد الموحد وفقراته المعدلة.');
     if(years>=25){
       bonus=(last+allow)*12;
-      h+=res('مكافأة نهاية الخدمة',f(bonus),'(');
+      h+=res('مكافأة نهاية الخدمة',f(bonus),'');
       if(!last)notes.push('أدخل آخر راتب اسمي لاحتساب المكافأة.');
     }else notes.push('مكافأة نهاية الخدمة تبدأ عند 25 سنة خدمة.');
   }
