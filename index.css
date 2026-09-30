@@ -1,4 +1,5 @@
-style>
+
+<style>
     *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 
     :root {
@@ -89,39 +90,105 @@ style>
 
     .btn-col { display: flex; flex-direction: column; align-items: center; gap: 12px; }
 
-.btngf
-{
-     
-      font-weight:600;
-      color:var(--light-green-text);
-      background:var(--light-green);
-      border-radius:980px;
-cursor:pointer;
--webkit-tap-highlight-color:transparent;
--webkit-user-select:none;
-user-select:none;
-transition:opacity .15s ease,transform .1s ease}
-
-
+    /* ===== الأزرار ===== */
     .btn {
+      --ring: rgba(0, 178, 149, .22);
+      position: relative;
+      overflow: hidden;
+      isolation: isolate;
       width: 100%;
       max-width: 210px;
+      min-height: 44px;
       padding: 10px 14px;
       font: inherit;
       font-size: 14px;
-      color:var(--light-green-text);
-      border-radius:980px;
       font-weight: 600;
       color: #fff;
-      background: var(--green);
+      background: linear-gradient(180deg, var(--green-light) -80%, var(--green) 65%);
+      border: 1.5px solid var(--green-light);
       border-radius: 980px;
+      box-shadow:
+        0 6px 14px rgba(0, 178, 149, .28),
+        inset 0 1px 0 rgba(255, 255, 255, .28);
       cursor: pointer;
-      -webkit-tap-highlight-color:transparent;
-touch-action: manipulation;
-      transition: opacity .15s ease, transform .1s ease;
+      -webkit-tap-highlight-color: transparent;
+      -webkit-user-select: none;
+      user-select: none;
+      touch-action: manipulation;
+      transition:
+        transform .18s cubic-bezier(.3, 1.4, .5, 1),
+        box-shadow .2s ease,
+        filter .2s ease,
+        border-color .2s ease;
     }
-    .btn:hover { opacity: .85; }
-    .btn:active { transform: scale(.97); }
+
+    /* لمعة خفيفة تمر عند المرور بالمؤشر */
+    .btn::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      z-index: -1;
+      background: linear-gradient(110deg, transparent 35%, rgba(255,255,255,.28) 50%, transparent 65%);
+      transform: translateX(-120%);
+      transition: transform .6s ease;
+    }
+
+    @media (hover: hover) {
+      .btn:hover {
+        transform: translateY(-1px);
+        filter: brightness(1.05);
+        box-shadow:
+          0 9px 18px rgba(0, 178, 149, .34),
+          inset 0 1px 0 rgba(255, 255, 255, .3);
+      }
+      .btn:hover::before { transform: translateX(120%); }
+    }
+
+    /* الضغط: ينخفض الزر ويغمق قليلًا مع ظل داخلي */
+    .btn:active,
+    .btn.is-pressed {
+      transform: scale(.955);
+      filter: brightness(.94);
+      border-color: var(--green);
+      box-shadow:
+        0 2px 5px rgba(0, 178, 149, .3),
+        inset 0 3px 8px rgba(0, 0, 0, .18);
+      transition-duration: .08s;
+    }
+
+    /* حلقة التركيز للوحة المفاتيح */
+    .btn:focus { outline: none; }
+    .btn:focus-visible {
+      box-shadow:
+        0 0 0 3px var(--surface),
+        0 0 0 5px var(--green),
+        0 6px 14px rgba(0, 178, 149, .28);
+    }
+
+    /* بعد اللمس: حلقة تتوسع وتتلاشى ثم يعود الزر بارتداد لطيف */
+    .btn.is-done { animation: settle .55s cubic-bezier(.3, 1.4, .5, 1); }
+    @keyframes settle {
+      0%   { transform: scale(.955); box-shadow: 0 0 0 0 rgba(79, 220, 198, .55), 0 2px 5px rgba(0,178,149,.3); }
+      45%  { transform: scale(1.025); }
+      100% { transform: scale(1); box-shadow: 0 0 0 12px rgba(79, 220, 198, 0), 0 6px 14px rgba(0,178,149,.28); }
+    }
+
+    /* موجة اللمس */
+    .ripple {
+      position: absolute;
+      z-index: -1;
+      width: 10px;
+      height: 10px;
+      margin: -5px 0 0 -5px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, .55);
+      pointer-events: none;
+      transform: scale(0);
+      animation: ripple .6s ease-out forwards;
+    }
+    @keyframes ripple {
+      to { transform: scale(var(--r, 30)); opacity: 0; }
+    }
 
     main {
       margin-block: auto;
@@ -141,6 +208,8 @@ color: var(--muted); font-variant-numeric: tabular-nums; }
       body { justify-content: flex-start; }
     }
     @media (prefers-reduced-motion: reduce) {
-      .btn { transition: none; }
+      .btn, .btn::before { transition: none; }
+      .btn.is-done { animation: none; }
+      .ripple { display: none; }
     }
   </style>
