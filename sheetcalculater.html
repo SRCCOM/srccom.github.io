@@ -392,15 +392,18 @@
             };
         }
         const gradeNumber = parseInt(currentGrade);
+        if (gradeNumber === 1 && currentStage >= 11) {
+            return { type: 'final' };
+        }
         let originalYears = 0;
         let nextGrade = currentGrade;
         let nextStage = 1;
         let nextPromotionDate = null;
         if (gradeNumber >= 6 && gradeNumber <= 10) {
-            originalYears = 5;
+            originalYears = 4;
             nextGrade = gradeNumber > 6 ? (gradeNumber - 1).toString() : "5";
-        } else if (gradeNumber >= 1 && gradeNumber <= 5) {
-            originalYears = 6;
+        } else if (gradeNumber >= 2 && gradeNumber <= 5) {
+            originalYears = 5;
             nextGrade = gradeNumber > 1 ? (gradeNumber - 1).toString() : "GM";
         }
         const effectiveYears = originalYears - (currentStage - 1);
@@ -730,6 +733,11 @@
                     annualStatusDisplay = "درجة قيادية";
                     nextPromotionDateText = "لا يوجد";
                     promotionStatusDisplay = "درجة قيادية";
+                } else if (promotionInfo.type === 'final') {
+                    nextAnnualDateText = "لا يوجد";
+                    annualStatusDisplay = "بلغت المرحلة الأخيرة";
+                    nextPromotionDateText = "لا يوجد";
+                    promotionStatusDisplay = "لا يوجد";
                 } else {
                     nextAnnualDateText = formatDate(promotionInfo.nextAnnualIncreaseDate);
                     if (promotionInfo.annualStatus === 'مستحقة الآن') {
