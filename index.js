@@ -1,5 +1,5 @@
     const links = {
-      calcBtn: 'https://srccom.github.io/s',
+      calcBtn: 'https://srccom.github.io/sheetcalculater',
       calcBtn2: 'https://srccom.github.io/r',
       calcBtn3: 'https://srccom.github.io/q',
       calcBtn4: 'https://srccom.github.io/ret'
