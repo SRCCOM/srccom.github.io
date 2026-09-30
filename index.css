@@ -89,6 +89,12 @@ style>
 
     .btn-col { display: flex; flex-direction: column; align-items: center; gap: 12px; }
 
+.bt {
+
+border: 2px solid var(--green-light);
+      box-shadow: 0 0 0 3px color-mix(in srgb, var(--green-light) 30%, transparent);
+}
+
     .btn {
       width: 100%;
       max-width: 210px;
@@ -98,8 +104,6 @@ style>
       font-weight: 600;
       color: #fff;
       background: var(--green);
-      border: 2px solid var(--green-light);
-      box-shadow: 0 0 0 3px color-mix(in srgb, var(--green-light) 30%, transparent);
       border-radius: 980px;
       cursor: pointer;
       -webkit-tap-highlight-color: transparent;
