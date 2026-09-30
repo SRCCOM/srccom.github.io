@@ -306,7 +306,7 @@ select.in {
 .sig {
   text-align: center;
   font-size: 14px;
-  color: var(--muted); font-variant-numeric: tabular-nums;
+  color:var(--text-4); font-variant-numeric: tabular-nums;
   margin-top: 28px;
 }
     footer { text-align: center;
