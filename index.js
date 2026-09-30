@@ -1,12 +1,41 @@
-const links = {
+    const links = {
       calcBtn: 'https://srccom.github.io/s',
       calcBtn2: 'https://srccom.github.io/r',
       calcBtn3: 'https://srccom.github.io/q',
       calcBtn4: 'https://srccom.github.io/ret'
     };
+    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
     Object.keys(links).forEach(id => {
-      document.getElementById(id).addEventListener('click', () => {
-        window.location.href = links[id];
+      const btn = document.getElementById(id);
+
+      
+
+      btn.addEventListener('pointerdown', e => {
+        btn.classList.add('is-pressed');
+        if (reduceMotion) return;
+        const rect = btn.getBoundingClientRect();
+        const dot = document.createElement('span');
+        dot.className = 'ripple';
+        dot.style.left = (e.clientX - rect.left) + 'px';
+        dot.style.top = (e.clientY - rect.top) + 'px';
+        dot.style.setProperty('--r', Math.ceil(rect.width / 5) + 6);
+        btn.appendChild(dot);
+        dot.addEventListener('animationend', () => dot.remove());
+      });
+
+      const release = () => btn.classList.remove('is-pressed');
+      ['pointerup', 'pointerleave', 'pointercancel'].forEach(t => btn.addEventListener(t, release));
+
+      
+
+
+
+      btn.addEventListener('click', () => {
+        btn.classList.remove('is-done');
+        void btn.offsetWidth;
+        btn.classList.add('is-done');
+        setTimeout(() => { window.location.href = links[id]; }, reduceMotion ? 0 : 260);
       });
     });
 
