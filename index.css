@@ -96,18 +96,14 @@ font-weight:600;
 color:var(--light-green-text);
 background:var(--light-green);
 border:1px solid rgba(0,0,0,.16);
-border-radius:980px;padding:13px 44px;
+border-radius:980px;
+padding:13px 44px;
 cursor:pointer;
 -webkit-tap-highlight-color:transparent;
 -webkit-user-select:none;
 user-select:none;
 transition:opacity .15s ease,transform .1s ease}
 
-.bt {
-
-border: 2px solid var(--green-light);
-      box-shadow: 0 0 0 3px color-mix(in srgb, var(--green-light) 30%, transparent);
-}
 
     .bt {
       width: 100%;
@@ -115,6 +111,8 @@ border: 2px solid var(--green-light);
       padding: 10px 14px;
       font: inherit;
       font-size: 14px;
+      border: 2px solid var(--green-light);
+      box-shadow: 0 0 0 3px color-mix(in srgb, var(--green-light) 30%, transparent);
       font-weight: 600;
       color: #fff;
       background: var(--green);
