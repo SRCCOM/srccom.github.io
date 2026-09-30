@@ -112,8 +112,8 @@
         .btn:disabled { opacity: .6; cursor: not-allowed; }
         .btn.secondary { background: var(--accent); }
         .btn.neutral { background: var(--surface); color: var(--text-2); border: 1px solid var(--border); }
-        #printRow { margin-top: 0; }
-        #printBtn { display: none; margin-top: 26px; }
+        .card-foot { margin-top: 16px; padding-top: 16px; border-top: 1px solid var(--border); text-align: center; }
+        #printBtn { display: none; }
 
         .loading-indicator { display: none; text-align: center; margin: 20px 0; padding: 14px 18px; background: var(--bg); border-radius: 16px; font-size: 15px; font-weight: 600; color: var(--text-2); }
         .loading-indicator i { font-size: 18px; color: var(--accent); margin-left: 10px; animation: spin 1.5s linear infinite; }
@@ -157,7 +157,9 @@
             }
             html, body { background: #fff !important; }
             body { background-color: var(--surface) !important; }
-            .hero, .no-print, .btn-row, .loading-indicator, .sig { display: none !important; }
+            .hero, .no-print, .btn-row, .loading-indicator { display: none !important; }
+            footer { position: fixed; bottom: 0; left: 0; right: 0; padding: 0; text-align: center; }
+            footer .sig { margin: 0; font-size: 12px; color: var(--text-3); }
             .card:not(.result-card) { display: none !important; }
             .wrap { padding-top: 0 !important; max-width: 100% !important; }
             .print-only-header { display: block !important; }
@@ -322,11 +324,10 @@
         <div id="salaryResult" class="result hidden"></div>
         <div id="serviceDuration" class="result hidden"></div>
         <div id="detailsBox" class="details hidden"></div>
+        <div class="card-foot no-print">
+            <button type="button" class="btn secondary" id="printBtn">حفظ النتائج</button>
+        </div>
     </section>
-
-    <div class="btn-row no-print" id="printRow">
-        <button type="button" class="btn secondary" id="printBtn">حفظ النتائج</button>
-    </div>
 
       <footer>
 
