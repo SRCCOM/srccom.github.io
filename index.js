@@ -1,7 +1,7 @@
 const links = {
       calcBtn: 'https://srccom.github.io/s',
       calcBtn2: 'https://srccom.github.io/r',
-      calcBtn3: 'https://srccom.github.io/q'
+      calcBtn3: 'https://srccom.github.io/q',
       calcBtn4: 'https://srccom.github.io/ret'
     };
     Object.keys(links).forEach(id => {
