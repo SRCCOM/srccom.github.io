@@ -1,180 +1,1000 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
+
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>حاسبة فاتورة الكهرباء المنزلية – العراق</title>
-<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;800&display=swap" rel="stylesheet">
-<style>
-:root{--bg:#f3f6fb;--card:#fff;--tx:#0f1f3d;--mut:#5b6b88;--pri:#0b2a5b;--acc:#ffc400;--bd:#dbe3f0;--ok:#1a9a5a;--warn:#e08a00;--bad:#d33;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
-@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0a1220;--card:#121d33;--tx:#eaf0fb;--mut:#9fb0cf;--pri:#ffc400;--bd:#243556}}
-html{scroll-padding-top:env(safe-area-inset-top,0px)}
-*{box-sizing:border-box}
-body{margin:0;background:var(--bg);color:var(--tx);font-family:Cairo,Tajawal,Tahoma,sans-serif;line-height:1.6}
-header{background:linear-gradient(135deg,#0b2a5b,#14438f);color:#fff;padding:22px 16px;text-align:center}
-header h1{margin:0;font-size:1.5rem}header h1 span{color:var(--acc)}header p{margin:4px 0 0;opacity:.85;font-size:.95rem}
-main{max-width:860px;margin:0 auto;padding:16px}
-.card{background:var(--card);border:1px solid var(--bd);border-radius:14px;padding:16px;margin-bottom:16px}
-h2{margin:0 0 12px;font-size:1.15rem;color:var(--pri)}
-.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px}
-label{display:block;font-weight:600;font-size:.9rem;margin-bottom:4px}
-input[type=number],input[type=date]{width:100%;padding:10px;border:1px solid var(--bd);border-radius:10px;background:var(--bg);color:var(--tx);font:inherit}
-input:focus{outline:2px solid var(--acc)}
-button{font:inherit;cursor:pointer;border:0;border-radius:10px;padding:10px 14px;background:var(--bd);color:var(--tx);font-weight:600}
-button.main{background:var(--acc);color:#0b2a5b;font-size:1.1rem;font-weight:800;padding:12px 24px}
-.row{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
-#err{color:var(--bad);font-weight:600;margin-top:10px;display:none}
-.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px}
-.mini{background:var(--bg);border:1px solid var(--bd);border-radius:12px;padding:10px;text-align:center}
-.mini small{display:block;color:var(--mut)}.mini b{font-size:1.1rem}
-.total{background:linear-gradient(135deg,#0b2a5b,#14438f);color:#fff;border-radius:14px;padding:18px;text-align:center;margin:12px 0}
-.total b{display:block;font-size:2.2rem;color:var(--acc);font-weight:800}
-table{width:100%;border-collapse:collapse;font-size:.92rem}
-.tw{overflow-x:auto}
-th,td{padding:8px;border-bottom:1px solid var(--bd);text-align:center;white-space:nowrap}th{background:var(--bg)}
-tr.t td{font-weight:800}
-.bar{height:16px;border-radius:8px;background:var(--bd);overflow:hidden}.bar i{display:block;height:100%;transition:width .4s}
-.pct{display:flex;gap:6px;margin:10px 0;flex-wrap:wrap;font-size:.85rem}.pct span{background:var(--bg);border:1px solid var(--bd);border-radius:20px;padding:2px 10px}
-details summary{cursor:pointer;font-weight:700;color:var(--pri)}
-.hide{display:none}
-#test{font-size:.8rem;color:var(--mut);text-align:center;padding-bottom:20px}
-@media print{header,#inputs,#settings,.row,#test,#last{display:none!important}body{background:#fff;color:#000}.card{border:1px solid #999}.total{background:#fff;color:#000;border:2px solid #000}.total b{color:#000}}
-</style>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>حاسبة فاتورة الكهرباء المنزلية – العراق</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;800&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: var(--sans);
+    }
+
+    *::before,
+    *::after {
+      box-sizing: border-box;
+    }
+
+    :root {
+      --text: #1d1d1f;
+      --text-2: #6e6e73;
+      --text-3: #86868b;
+      --text-4: #aeaeb2;
+      --muted: var(--text-3);
+      --border: #CCCCCC;
+      --surface: #fff;
+      --bg: #f5f5f7;
+      --accent: #0066cc;
+      --danger: #ff3b30;
+      --light-green: #00B295;
+      --light-green-text: #FFFFFF;
+      --green: var(--light-green);
+      --green-light: #4fdcc6;
+      --ok: #1a9a5a;
+      --warn: #e08a00;
+      --yellow: #ffc400;
+      --sans: "Alan Sans", "Cairo", "SF Pro Text", "Segoe UI", Tahoma, Arial, sans-serif;
+      --shadow: 0 12px 32px rgba(0, 0, 0, .08), 0 2px 8px rgba(0, 0, 0, .04);
+      color-scheme: light dark;
+      box-sizing: border-box;
+      padding-top: env(safe-area-inset-top, 0px);
+    }
+
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --text: #f5f5f7;
+        --text-2: #a1a1a6;
+        --text-3: #8e8e93;
+        --text-4: #636366;
+        --border: #38383a;
+        --surface: #1c1c1e;
+        --bg: #000;
+        --shadow: 0 12px 32px rgba(0, 0, 0, .55), 0 2px 8px rgba(0, 0, 0, .35);
+      }
+    }
+
+    html {
+      -webkit-text-size-adjust: 100%;
+      text-size-adjust: 100%;
+      scroll-padding-top: env(safe-area-inset-top, 0px);
+    }
+
+    body {
+      min-height: 100vh;
+      min-height: 100dvh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: clamp(14px, 3vh, 26px);
+      padding: 16px max(16px, env(safe-area-inset-right)) max(16px, env(safe-area-inset-bottom)) max(16px, env(safe-area-inset-left));
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    h1 {
+      font-size: clamp(22px, 5vw, 30px);
+      font-weight: 700;
+      line-height: 1.3;
+      text-align: center;
+    }
+
+    h1 span {
+      color: var(--light-green);
+    }
+
+    .sub {
+      width: 100%;
+      max-width: 400px;
+      margin: calc(clamp(14px, 3vh, 26px) * -0.4) auto 0;
+      font-size: clamp(12.5px, 3.3vw, 14px);
+      font-weight: 300;
+      line-height: 1.9;
+      color: var(--muted);
+      text-align: center;
+    }
+
+    main {
+      width: 100%;
+      max-width: 860px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .card {
+      width: 100%;
+      padding: clamp(18px, 4vw, 26px) clamp(16px, 4vw, 22px);
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 22px;
+      box-shadow: var(--shadow);
+    }
+
+    .card h2 {
+      margin-bottom: 14px;
+      font-size: 1.05rem;
+      font-weight: 600;
+      color: var(--text);
+      text-align: start;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 12px;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 4px;
+      font-weight: 600;
+      font-size: .9rem;
+    }
+
+    input[type=number],
+    input[type=date] {
+      width: 100%;
+      padding: 10px 12px;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      background: var(--bg);
+      color: var(--text);
+      font-size: 14px;
+    }
+
+    input[type=checkbox] {
+      margin-inline-end: 6px;
+      accent-color: var(--light-green);
+    }
+
+    input:focus {
+      outline: 2px solid var(--light-green);
+      outline-offset: 1px;
+    }
+
+    small {
+      color: var(--muted);
+    }
+
+    .row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 14px;
+    }
+
+    .hide {
+      display: none;
+    }
+
+    #err {
+      display: none;
+      margin-top: 10px;
+      color: var(--danger);
+      font-weight: 600;
+    }
+
+    .cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: 10px;
+    }
+
+    .mini {
+      padding: 10px;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      text-align: center;
+    }
+
+    .mini small {
+      display: block;
+      color: var(--muted);
+    }
+
+    .mini b {
+      font-size: 1.1rem;
+    }
+
+    .total {
+      margin: 12px 0;
+      padding: 18px;
+      background: linear-gradient(180deg, var(--green-light) -80%, var(--light-green) 65%);
+      color: var(--light-green-text);
+      border-radius: 18px;
+      box-shadow: 0 6px 14px rgba(0, 178, 149, .28);
+      text-align: center;
+    }
+
+    .total b {
+      display: block;
+      font-size: 2.2rem;
+      font-weight: 800;
+      color: #fff;
+    }
+
+    .tw {
+      overflow-x: auto;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: .92rem;
+    }
+
+    th,
+    td {
+      padding: 8px;
+      border-bottom: 1px solid var(--border);
+      text-align: center;
+      white-space: nowrap;
+    }
+
+    th {
+      background: var(--bg);
+    }
+
+    tr.t td {
+      font-weight: 800;
+    }
+
+    .bar {
+      height: 16px;
+      border-radius: 8px;
+      background: var(--border);
+      overflow: hidden;
+    }
+
+    .bar i {
+      display: block;
+      height: 100%;
+      transition: width .4s;
+    }
+
+    .pct {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin: 10px 0;
+      font-size: .85rem;
+    }
+
+    .pct span {
+      padding: 2px 10px;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+    }
+
+    details summary {
+      cursor: pointer;
+      font-weight: 700;
+    }
+
+    #msg {
+      margin-top: 8px;
+      color: var(--ok);
+      font-weight: 600;
+    }
+
+    #test {
+      padding-bottom: 20px;
+      font-size: .8rem;
+      color: var(--muted);
+      text-align: center;
+    }
+
+    .btn {
+      --ring: rgba(0, 178, 149, .22);
+      position: relative;
+      overflow: hidden;
+      isolation: isolate;
+      width: 100%;
+      max-width: 210px;
+      min-height: 44px;
+      padding: 10px 14px;
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--light-green-text);
+      background: linear-gradient(180deg, var(--green-light) -80%, var(--light-green) 65%);
+      border: 1.5px solid var(--green-light);
+      border-radius: 980px;
+      box-shadow: 0 6px 14px rgba(0, 178, 149, .28), inset 0 1px 0 rgba(255, 255, 255, .28);
+      cursor: pointer;
+      -webkit-tap-highlight-color: transparent;
+      -webkit-user-select: none;
+      user-select: none;
+      touch-action: manipulation;
+      transition:
+        transform .18s cubic-bezier(.3, 1.4, .5, 1),
+        box-shadow .2s ease,
+        filter .2s ease,
+        border-color .2s ease;
+    }
+
+    .row .btn {
+      width: auto;
+      max-width: none;
+      flex: 1 1 150px;
+    }
+
+    .btn.big {
+      min-height: 48px;
+      font-size: 16px;
+      font-weight: 700;
+    }
+
+    .btn.sec {
+      background: var(--bg);
+      color: var(--text);
+      border-color: var(--border);
+      box-shadow: none;
+    }
+
+    .btn::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      z-index: -1;
+      background: linear-gradient(110deg, transparent 35%, rgba(255, 255, 255, .28) 50%, transparent 65%);
+      transform: translateX(-120%);
+      transition: transform .6s ease;
+    }
+
+    @media (hover: hover) {
+      .btn:hover {
+        transform: translateY(-1px);
+        filter: brightness(1.05);
+        box-shadow: 0 9px 18px rgba(0, 178, 149, .34), inset 0 1px 0 rgba(255, 255, 255, .3);
+      }
+
+      .btn.sec:hover {
+        box-shadow: 0 4px 10px rgba(0, 0, 0, .1);
+      }
+
+      .btn:hover::before {
+        transform: translateX(120%);
+      }
+    }
+
+    .btn:active,
+    .btn.is-pressed {
+      transform: scale(.955);
+      filter: brightness(.94);
+      border-color: var(--light-green);
+      box-shadow: 0 2px 5px rgba(0, 178, 149, .3), inset 0 3px 8px rgba(0, 0, 0, .18);
+      transition-duration: .08s;
+    }
+
+    .btn:focus {
+      outline: none;
+    }
+
+    .btn:focus-visible {
+      box-shadow:
+        0 0 0 3px var(--surface),
+        0 0 0 5px var(--light-green),
+        0 6px 14px rgba(0, 178, 149, .28);
+    }
+
+    .btn.is-done {
+      animation: settle .55s cubic-bezier(.3, 1.4, .5, 1);
+    }
+
+    @keyframes settle {
+      0% {
+        transform: scale(.955);
+        box-shadow: 0 0 0 0 rgba(79, 220, 198, .55), 0 2px 5px rgba(0, 178, 149, .3);
+      }
+
+      45% {
+        transform: scale(1.025);
+      }
+
+      100% {
+        transform: scale(1);
+        box-shadow: 0 0 0 12px rgba(79, 220, 198, 0), 0 6px 14px rgba(0, 178, 149, .28);
+      }
+    }
+
+    .ripple {
+      position: absolute;
+      z-index: -1;
+      width: 10px;
+      height: 10px;
+      margin: -5px 0 0 -5px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, .55);
+      pointer-events: none;
+      transform: scale(0);
+      animation: ripple .6s ease-out forwards;
+    }
+
+    @keyframes ripple {
+      to {
+        transform: scale(var(--r, 30));
+        opacity: 0;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+
+      .btn,
+      .btn::before {
+        transition: none;
+      }
+
+      .btn.is-done {
+        animation: none;
+      }
+
+      .ripple {
+        display: none;
+      }
+    }
+
+    @media print {
+
+      h1,
+      .sub,
+      #inputs,
+      #settings,
+      .row,
+      #test,
+      #last {
+        display: none !important;
+      }
+
+      body {
+        background: #fff;
+        color: #000;
+      }
+
+      .card {
+        border: 1px solid #999;
+        box-shadow: none;
+      }
+
+      .total {
+        background: #fff;
+        color: #000;
+        border: 2px solid #000;
+        box-shadow: none;
+      }
+
+      .total b {
+        color: #000;
+      }
+    }
+  </style>
 </head>
+
 <body>
-<header><h1>⚡ حاسبة فاتورة الكهرباء <span>المنزلية – العراق</span></h1><p>احسب فاتورتك الشهرية وفق نظام الشرائح التصاعدية</p></header>
-<main>
-<section class="card" id="inputs">
-<h2>إدخال القراءات</h2>
-<div class="grid">
-<div><label for="prev">القراءة السابقة للعداد</label><input type="number" id="prev" min="0" step="1" inputmode="numeric"></div>
-<div><label for="next">القراءة اللاحقة للعداد</label><input type="number" id="next" min="0" step="1" inputmode="numeric"></div>
-<div><label for="d1">تاريخ القراءة السابقة (اختياري)</label><input type="date" id="d1"></div>
-<div><label for="d2">تاريخ القراءة اللاحقة (اختياري)</label><input type="date" id="d2"></div>
-<div><label for="fee">أجور الطباعة (د.ع)</label><input type="number" id="fee" min="0" step="1" inputmode="numeric"></div>
-</div>
-<p><label style="font-weight:400"><input type="checkbox" id="rst"> تم استبدال العداد أو تصفيره</label></p>
-<div id="rstBox" class="hide"><label for="old">آخر قراءة للعداد القديم قبل الاستبدال/التصفير</label><input type="number" id="old" min="0" step="1" inputmode="numeric"><small style="color:var(--mut)">الاستهلاك = (آخر قراءة للقديم − السابقة) + القراءة اللاحقة الجديدة</small></div>
-<div id="err" role="alert"></div>
-<div class="row"><button class="main" id="go">احسب الفاتورة</button><button id="clr">إعادة ضبط</button></div>
-</section>
+  <h1>حاسبة فاتورة الكهرباء <span>المنزلية – العراق</span></h1>
+  <p class="sub">احسب فاتورتك الشهرية وفق نظام الشرائح التصاعدية</p>
 
-<section class="card" id="res" hidden>
-<h2>نتيجة الحساب <small id="when" style="color:var(--mut);font-weight:400"></small></h2>
-<div class="cards" id="cards"></div>
-<div class="total">المبلغ الإجمالي المستحق<b id="tot"></b></div>
-<div class="tw"><table><thead><tr><th>الشريحة</th><th>الوحدات المحتسبة</th><th>سعر الوحدة</th><th>المبلغ</th></tr></thead><tbody id="tb"></tbody></table></div>
-<h2 style="margin-top:16px">نسبة كل شريحة من الاستهلاك</h2>
-<div class="pct" id="pct"></div>
-<h2>مستوى الاستهلاك</h2>
-<div class="bar"><i id="lvl"></i></div>
-<p id="lvlTx" style="margin:6px 0 0"></p>
-<div class="row">
-<button id="cp">📋 نسخ التفاصيل</button><button id="pr">🖨️ طباعة كشف الحساب</button><button id="pdf">⬇️ تنزيل PDF</button><button id="img">📱 فاتورة مصغرة (صورة)</button>
-</div>
-<p id="msg" style="color:var(--ok);font-weight:600"></p>
-</section>
+  <main>
+    <section class="card" id="inputs">
+      <h2>إدخال القراءات</h2>
+      <div class="grid">
+        <div>
+          <label for="prev">القراءة السابقة للعداد</label>
+          <input type="number" id="prev" min="0" step="1" inputmode="numeric">
+        </div>
+        <div>
+          <label for="next">القراءة اللاحقة للعداد</label>
+          <input type="number" id="next" min="0" step="1" inputmode="numeric">
+        </div>
+        <div>
+          <label for="d1">تاريخ القراءة السابقة (اختياري)</label>
+          <input type="date" id="d1">
+        </div>
+        <div>
+          <label for="d2">تاريخ القراءة اللاحقة (اختياري)</label>
+          <input type="date" id="d2">
+        </div>
+        <div>
+          <label for="fee">أجور الطباعة (د.ع)</label>
+          <input type="number" id="fee" min="0" step="1" inputmode="numeric">
+        </div>
+      </div>
 
-<section class="card" id="last" hidden><h2>آخر عملية حساب محفوظة</h2><p id="lastTx"></p><button id="load">استرجاع</button></section>
+      <p style="margin-top:12px">
+        <label style="font-weight:400">
+          <input type="checkbox" id="rst"> تم استبدال العداد أو تصفيره
+        </label>
+      </p>
 
-<section class="card" id="settings"><details><summary>⚙️ إعدادات التعرفة (قابلة للتعديل)</summary>
-<div class="grid" style="margin-top:12px" id="sg"></div>
-<div class="row"><button id="sv">حفظ الإعدادات</button><button id="df">الافتراضي</button></div></details></section>
-<div id="test"></div>
-</main>
-<script>
-const DEFAULTS={limits:[1500,3000,4000],prices:[10,35,80,120],fee:3000};
-const NAMES=['الأولى','الثانية','الثالثة','الرابعة'];
-/* ===== محرك الحساب (منفصل عن الواجهة) ===== */
-function calcBill(units,cfg){
-  const cap=[cfg.limits[0],cfg.limits[1]-cfg.limits[0],cfg.limits[2]-cfg.limits[1],Infinity];
-  let rem=units;const tiers=cap.map((c,i)=>{const u=Math.min(rem,c);rem-=u;return{units:u,price:cfg.prices[i],amount:u*cfg.prices[i]}});
-  const sub=tiers.reduce((s,t)=>s+t.amount,0);
-  return{units,tiers,sub,fee:cfg.fee,total:sub+cfg.fee};
-}
-function runTests(){
-  const exp={0:[0,0,0,0],1500:[1500,0,0,0],1501:[1500,1,0,0],3000:[1500,1500,0,0],3001:[1500,1500,1,0],4000:[1500,1500,1000,0],4001:[1500,1500,1000,1],4251:[1500,1500,1000,251],5000:[1500,1500,1000,1000]};
-  const tot={0:3000,5000:270500,4251:180620};let ok=0,n=0;
-  for(const k in exp){n++;const r=calcBill(+k,DEFAULTS);if(r.tiers.every((t,i)=>t.units===exp[k][i])&&(tot[k]===undefined||r.total===tot[k]))ok++}
-  return[ok,n];
-}
-/* ===== واجهة ===== */
-const $=id=>document.getElementById(id);
-const fmt=n=>Math.round(n).toLocaleString('en-US');
-const dn=n=>fmt(n)+' د.ع';
-let cfg=JSON.parse(JSON.stringify(DEFAULTS)),cur=null;
-function store(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}
-function fetchS(k){try{return JSON.parse(localStorage.getItem(k))}catch(e){return null}}
-const sv=fetchS('cfg');if(sv&&sv.limits&&sv.prices)cfg=sv;
-function buildSettings(){
-  const f=[['حد الشريحة الأولى','l0',cfg.limits[0]],['حد الشريحة الثانية','l1',cfg.limits[1]],['حد الشريحة الثالثة','l2',cfg.limits[2]],['سعر الأولى','p0',cfg.prices[0]],['سعر الثانية','p1',cfg.prices[1]],['سعر الثالثة','p2',cfg.prices[2]],['سعر الرابعة','p3',cfg.prices[3]],['أجور الطباعة','fe',cfg.fee]];
-  $('sg').innerHTML=f.map(([t,id,v])=>`<div><label for="${id}">${t}</label><input type="number" id="${id}" min="0" value="${v}"></div>`).join('');
-  $('fee').value=cfg.fee;
-}
-buildSettings();
-$('sv').onclick=()=>{
-  const g=i=>Number($(i).value),l=[g('l0'),g('l1'),g('l2')],p=[g('p0'),g('p1'),g('p2'),g('p3')];
-  if(!(l[0]>0&&l[1]>l[0]&&l[2]>l[1])||[...p,g('fe')].some(x=>!(x>=0)))return alert('تحقق من القيم: يجب أن تكون الحدود تصاعدية والأسعار غير سالبة.');
-  cfg={limits:l,prices:p,fee:g('fe')};store('cfg',cfg);buildSettings();alert('تم حفظ الإعدادات');
-};
-$('df').onclick=()=>{cfg=JSON.parse(JSON.stringify(DEFAULTS));store('cfg',cfg);buildSettings()};
-$('rst').onchange=e=>$('rstBox').classList.toggle('hide',!e.target.checked);
-function showErr(m){const e=$('err');e.textContent=m;e.style.display=m?'block':'none'}
-function isInt(v){return v!==''&&/^\d+$/.test(String(v).trim())}
-$('go').onclick=()=>{
-  showErr('');
-  const p=$('prev').value,n=$('next').value,f=$('fee').value,reset=$('rst').checked,o=$('old').value;
-  if(!isInt(p)||!isInt(n))return showErr('يرجى إدخال القراءتين كأرقام صحيحة غير سالبة.');
-  if(!isInt(f))return showErr('أجور الطباعة يجب أن تكون رقماً صحيحاً غير سالب.');
-  let units;
-  if(reset){
-    if(!isInt(o))return showErr('أدخل آخر قراءة للعداد القديم.');
-    if(+o<+p)return showErr('آخر قراءة للعداد القديم لا يمكن أن تقل عن القراءة السابقة.');
-    units=(+o-+p)+(+n);
-  }else{
-    if(+n<+p)return showErr('القراءة اللاحقة أقل من السابقة. إذا تم استبدال العداد أو تصفيره فعّل خيار «تم استبدال العداد» وأدخل آخر قراءة للعداد القديم.');
-    units=+n-+p;
-  }
-  if($('d1').value&&$('d2').value&&$('d2').value<$('d1').value)return showErr('تاريخ القراءة اللاحقة يسبق تاريخ القراءة السابقة.');
-  const r=calcBill(units,{...cfg,fee:+f});
-  r.date=new Date().toLocaleString('ar-IQ-u-nu-latn');r.prev=+p;r.next=+n;r.d1=$('d1').value;r.d2=$('d2').value;
-  cur=r;render(r);store('last',r);showLast();
-};
-function render(r){
-  $('res').hidden=false;$('when').textContent='— '+r.date;
-  const c=[['الاستهلاك الشهري',fmt(r.units)+' kWh'],...r.tiers.map((t,i)=>['الشريحة '+NAMES[i],dn(t.amount)]),['مجموع أجور الاستهلاك',dn(r.sub)],['أجور الطباعة',dn(r.fee)]];
-  $('cards').innerHTML=c.map(([a,b])=>`<div class="mini"><small>${a}</small><b>${b}</b></div>`).join('');
-  $('tot').textContent=dn(r.total);
-  $('tb').innerHTML=r.tiers.map((t,i)=>`<tr><td>${NAMES[i]}</td><td>${fmt(t.units)}</td><td>${fmt(t.price)} د.ع</td><td>${dn(t.amount)}</td></tr>`).join('')+
-   `<tr class="t"><td>مجموع الاستهلاك</td><td>${fmt(r.units)}</td><td>—</td><td>${dn(r.sub)}</td></tr><tr><td>أجور الطباعة</td><td>—</td><td>—</td><td>${dn(r.fee)}</td></tr><tr class="t"><td>الإجمالي النهائي</td><td>—</td><td>—</td><td>${dn(r.total)}</td></tr>`;
-  $('pct').innerHTML=r.tiers.map((t,i)=>`<span>${NAMES[i]}: ${r.units?(t.units/r.units*100).toFixed(1):'0.0'}%</span>`).join('');
-  const L=cfg.limits,u=r.units,pc=Math.min(100,u/(L[2]*1.25)*100);
-  const lv=u<=L[0]?['var(--ok)','استهلاكك منخفض ضمن الشريحة الأولى. استمر في الترشيد.']:u<=L[1]?['var(--acc)','استهلاكك متوسط. تقليل الاستهلاك قد يخفض فاتورتك.']:u<=L[2]?['var(--warn)','استهلاكك مرتفع. تقليل الاستهلاك قد يخفض فاتورتك بشكل ملحوظ.']:['var(--bad)','استهلاكك مرتفع جداً ويدخل الشريحة الأعلى سعراً. تقليله يخفض الفاتورة كثيراً.'];
-  $('lvl').style.width=pc+'%';$('lvl').style.background=lv[0];$('lvlTx').textContent=lv[1];
-  $('res').scrollIntoView({behavior:'smooth'});
-}
-function text(r){
-  return ['حاسبة فاتورة الكهرباء المنزلية – العراق','التاريخ: '+r.date,`القراءة السابقة: ${fmt(r.prev)} | اللاحقة: ${fmt(r.next)}`,'الاستهلاك: '+fmt(r.units)+' kWh',...r.tiers.map((t,i)=>`الشريحة ${NAMES[i]}: ${fmt(t.units)} × ${t.price} = ${dn(t.amount)}`),'مجموع الاستهلاك: '+dn(r.sub),'أجور الطباعة: '+dn(r.fee),'الإجمالي المستحق: '+dn(r.total)].join('\n');
-}
-function note(m){$('msg').textContent=m;setTimeout(()=>$('msg').textContent='',2500)}
-$('cp').onclick=async()=>{try{await navigator.clipboard.writeText(text(cur));note('تم نسخ التفاصيل')}catch(e){const a=document.createElement('textarea');a.value=text(cur);document.body.appendChild(a);a.select();try{document.execCommand('copy');note('تم نسخ التفاصيل')}catch(x){note('تعذر النسخ')}a.remove()}};
-$('pr').onclick=()=>window.print();
-$('pdf').onclick=()=>{alert('في نافذة الطباعة اختر «حفظ كـ PDF» كوجهة الطباعة.');window.print()};
-$('img').onclick=()=>{
-  const r=cur,cv=document.createElement('canvas');cv.width=720;cv.height=620;const x=cv.getContext('2d');
-  x.fillStyle='#0b2a5b';x.fillRect(0,0,720,620);x.fillStyle='#ffc400';x.fillRect(0,0,720,8);
-  x.direction='rtl';x.textAlign='right';x.font='700 30px Cairo,Tahoma,sans-serif';x.fillStyle='#fff';x.fillText('⚡ فاتورة الكهرباء المنزلية – العراق',680,70);
-  x.font='400 20px Cairo,Tahoma,sans-serif';x.fillStyle='#b8c6e3';x.fillText(r.date,680,105);
-  x.fillStyle='#fff';x.font='600 22px Cairo,Tahoma,sans-serif';
-  let y=165;[['الاستهلاك',fmt(r.units)+' kWh'],...r.tiers.map((t,i)=>['الشريحة '+NAMES[i]+' ('+fmt(t.units)+' وحدة)',dn(t.amount)]),['أجور الطباعة',dn(r.fee)]].forEach(([a,b])=>{x.textAlign='right';x.fillText(a,680,y);x.textAlign='left';x.fillText(b,40,y);y+=48});
-  x.fillStyle='#ffc400';x.fillRect(40,y,640,4);y+=60;x.textAlign='right';x.fillStyle='#fff';x.font='700 26px Cairo,Tahoma,sans-serif';x.fillText('الإجمالي المستحق',680,y);x.textAlign='left';x.fillStyle='#ffc400';x.font='800 36px Cairo,Tahoma,sans-serif';x.fillText(dn(r.total),40,y+2);
-  const a=document.createElement('a');a.download='فاتورة-الكهرباء.png';a.href=cv.toDataURL('image/png');a.click();note('تم إنشاء الصورة');
-};
-$('clr').onclick=()=>{['prev','next','d1','d2','old'].forEach(i=>$(i).value='');$('fee').value=cfg.fee;$('rst').checked=false;$('rstBox').classList.add('hide');showErr('');$('res').hidden=true;cur=null};
-function showLast(){const l=fetchS('last');if(!l)return;$('last').hidden=false;$('lastTx').textContent=`${l.date} — الاستهلاك ${fmt(l.units)} kWh — الإجمالي ${dn(l.total)}`}
-$('load').onclick=()=>{const l=fetchS('last');if(!l)return;cur=l;$('prev').value=l.prev;$('next').value=l.next;$('d1').value=l.d1||'';$('d2').value=l.d2||'';$('fee').value=l.fee;render(l)};
-showLast();
-const[ok,n]=runTests();$('test').textContent=ok===n?`✔ اجتازت اختبارات محرك الحساب (${ok}/${n})`:`✖ فشل في اختبارات محرك الحساب (${ok}/${n})`;
-</script>
+      <div id="rstBox" class="hide">
+        <label for="old">آخر قراءة للعداد القديم قبل الاستبدال/التصفير</label>
+        <input type="number" id="old" min="0" step="1" inputmode="numeric">
+        <small>الاستهلاك = (آخر قراءة للقديم − السابقة) + القراءة اللاحقة الجديدة</small>
+      </div>
+
+      <div id="err" role="alert"></div>
+
+      <div class="row">
+        <button class="btn big" id="go">احسب الفاتورة</button>
+        <button class="btn sec" id="clr">إعادة ضبط</button>
+      </div>
+    </section>
+
+    <section class="card" id="res" hidden>
+      <h2>نتيجة الحساب <small id="when" style="font-weight:400"></small></h2>
+      <div class="cards" id="cards"></div>
+      <div class="total">المبلغ الإجمالي المستحق<b id="tot"></b></div>
+
+      <div class="tw">
+        <table>
+          <thead>
+            <tr>
+              <th>الشريحة</th>
+              <th>الوحدات المحتسبة</th>
+              <th>سعر الوحدة</th>
+              <th>المبلغ</th>
+            </tr>
+          </thead>
+          <tbody id="tb"></tbody>
+        </table>
+      </div>
+
+      <h2 style="margin-top:16px">نسبة كل شريحة من الاستهلاك</h2>
+      <div class="pct" id="pct"></div>
+
+      <h2>مستوى الاستهلاك</h2>
+      <div class="bar"><i id="lvl"></i></div>
+      <p id="lvlTx" style="margin:6px 0 0"></p>
+
+      <div class="row">
+        <button class="btn sec" id="cp">نسخ التفاصيل</button>
+        <button class="btn sec" id="pr">طباعة كشف الحساب</button>
+        <button class="btn sec" id="pdf">تنزيل PDF</button>
+        <button class="btn" id="img">فاتورة مصغرة (صورة)</button>
+      </div>
+      <p id="msg"></p>
+    </section>
+
+    <section class="card" id="last" hidden>
+      <h2>آخر عملية حساب محفوظة</h2>
+      <p id="lastTx"></p>
+      <div class="row">
+        <button class="btn sec" id="load">استرجاع</button>
+      </div>
+    </section>
+
+    <section class="card" id="settings">
+      <details>
+        <summary>إعدادات التعرفة (قابلة للتعديل)</summary>
+        <div class="grid" style="margin-top:12px" id="sg"></div>
+        <div class="row">
+          <button class="btn" id="sv">حفظ الإعدادات</button>
+          <button class="btn sec" id="df">الافتراضي</button>
+        </div>
+      </details>
+    </section>
+
+    <div id="test"></div>
+  </main>
+
+  <script>
+    const DEFAULTS = {
+      limits: [1500, 3000, 4000],
+      prices: [10, 35, 80, 120],
+      fee: 3000
+    };
+
+    const NAMES = ['الأولى', 'الثانية', 'الثالثة', 'الرابعة'];
+
+    function calcBill(units, cfg) {
+      const cap = [
+        cfg.limits[0],
+        cfg.limits[1] - cfg.limits[0],
+        cfg.limits[2] - cfg.limits[1],
+        Infinity
+      ];
+
+      let rem = units;
+      const tiers = cap.map((c, i) => {
+        const u = Math.min(rem, c);
+        rem -= u;
+        return { units: u, price: cfg.prices[i], amount: u * cfg.prices[i] };
+      });
+
+      const sub = tiers.reduce((s, t) => s + t.amount, 0);
+      return { units, tiers, sub, fee: cfg.fee, total: sub + cfg.fee };
+    }
+
+    function runTests() {
+      const exp = {
+        0: [0, 0, 0, 0],
+        1500: [1500, 0, 0, 0],
+        1501: [1500, 1, 0, 0],
+        3000: [1500, 1500, 0, 0],
+        3001: [1500, 1500, 1, 0],
+        4000: [1500, 1500, 1000, 0],
+        4001: [1500, 1500, 1000, 1],
+        4251: [1500, 1500, 1000, 251],
+        5000: [1500, 1500, 1000, 1000]
+      };
+      const tot = { 0: 3000, 5000: 270500, 4251: 180620 };
+
+      let ok = 0;
+      let n = 0;
+
+      for (const k in exp) {
+        n++;
+        const r = calcBill(+k, DEFAULTS);
+        const tiersMatch = r.tiers.every((t, i) => t.units === exp[k][i]);
+        const totalMatch = tot[k] === undefined || r.total === tot[k];
+        if (tiersMatch && totalMatch) ok++;
+      }
+
+      return [ok, n];
+    }
+
+    const $ = id => document.getElementById(id);
+    const fmt = n => Math.round(n).toLocaleString('en-US');
+    const dn = n => fmt(n) + ' د.ع';
+
+    let cfg = JSON.parse(JSON.stringify(DEFAULTS));
+    let cur = null;
+
+    function store(k, v) {
+      try {
+        localStorage.setItem(k, JSON.stringify(v));
+      } catch (e) { }
+    }
+
+    function fetchS(k) {
+      try {
+        return JSON.parse(localStorage.getItem(k));
+      } catch (e) {
+        return null;
+      }
+    }
+
+    const saved = fetchS('cfg');
+    if (saved && saved.limits && saved.prices) cfg = saved;
+
+    function buildSettings() {
+      const fields = [
+        ['حد الشريحة الأولى', 'l0', cfg.limits[0]],
+        ['حد الشريحة الثانية', 'l1', cfg.limits[1]],
+        ['حد الشريحة الثالثة', 'l2', cfg.limits[2]],
+        ['سعر الأولى', 'p0', cfg.prices[0]],
+        ['سعر الثانية', 'p1', cfg.prices[1]],
+        ['سعر الثالثة', 'p2', cfg.prices[2]],
+        ['سعر الرابعة', 'p3', cfg.prices[3]],
+        ['أجور الطباعة', 'fe', cfg.fee]
+      ];
+
+      $('sg').innerHTML = fields
+        .map(([title, id, value]) => `
+          <div>
+            <label for="${id}">${title}</label>
+            <input type="number" id="${id}" min="0" value="${value}">
+          </div>`)
+        .join('');
+
+      $('fee').value = cfg.fee;
+    }
+
+    buildSettings();
+
+    $('sv').onclick = () => {
+      const g = id => Number($(id).value);
+      const limits = [g('l0'), g('l1'), g('l2')];
+      const prices = [g('p0'), g('p1'), g('p2'), g('p3')];
+
+      const limitsValid = limits[0] > 0 && limits[1] > limits[0] && limits[2] > limits[1];
+      const pricesValid = ![...prices, g('fe')].some(x => !(x >= 0));
+
+      if (!limitsValid || !pricesValid) {
+        return alert('تحقق من القيم: يجب أن تكون الحدود تصاعدية والأسعار غير سالبة.');
+      }
+
+      cfg = { limits, prices, fee: g('fe') };
+      store('cfg', cfg);
+      buildSettings();
+      alert('تم حفظ الإعدادات');
+    };
+
+    $('df').onclick = () => {
+      cfg = JSON.parse(JSON.stringify(DEFAULTS));
+      store('cfg', cfg);
+      buildSettings();
+    };
+
+    $('rst').onchange = e => $('rstBox').classList.toggle('hide', !e.target.checked);
+
+    function showErr(message) {
+      const el = $('err');
+      el.textContent = message;
+      el.style.display = message ? 'block' : 'none';
+    }
+
+    function isInt(v) {
+      return v !== '' && /^\d+$/.test(String(v).trim());
+    }
+
+    $('go').onclick = () => {
+      showErr('');
+
+      const p = $('prev').value;
+      const n = $('next').value;
+      const f = $('fee').value;
+      const reset = $('rst').checked;
+      const o = $('old').value;
+
+      if (!isInt(p) || !isInt(n)) {
+        return showErr('يرجى إدخال القراءتين كأرقام صحيحة غير سالبة.');
+      }
+      if (!isInt(f)) {
+        return showErr('أجور الطباعة يجب أن تكون رقماً صحيحاً غير سالب.');
+      }
+
+      let units;
+
+      if (reset) {
+        if (!isInt(o)) {
+          return showErr('أدخل آخر قراءة للعداد القديم.');
+        }
+        if (+o < +p) {
+          return showErr('آخر قراءة للعداد القديم لا يمكن أن تقل عن القراءة السابقة.');
+        }
+        units = (+o - +p) + (+n);
+      } else {
+        if (+n < +p) {
+          return showErr('القراءة اللاحقة أقل من السابقة. إذا تم استبدال العداد أو تصفيره فعّل خيار «تم استبدال العداد» وأدخل آخر قراءة للعداد القديم.');
+        }
+        units = +n - +p;
+      }
+
+      if ($('d1').value && $('d2').value && $('d2').value < $('d1').value) {
+        return showErr('تاريخ القراءة اللاحقة يسبق تاريخ القراءة السابقة.');
+      }
+
+      const r = calcBill(units, { ...cfg, fee: +f });
+      r.date = new Date().toLocaleString('ar-IQ-u-nu-latn');
+      r.prev = +p;
+      r.next = +n;
+      r.d1 = $('d1').value;
+      r.d2 = $('d2').value;
+
+      cur = r;
+      render(r);
+      store('last', r);
+      showLast();
+    };
+
+    function render(r) {
+      $('res').hidden = false;
+      $('when').textContent = '— ' + r.date;
+
+      const summary = [
+        ['الاستهلاك الشهري', fmt(r.units) + ' kWh'],
+        ...r.tiers.map((t, i) => ['الشريحة ' + NAMES[i], dn(t.amount)]),
+        ['مجموع أجور الاستهلاك', dn(r.sub)],
+        ['أجور الطباعة', dn(r.fee)]
+      ];
+
+      $('cards').innerHTML = summary
+        .map(([label, value]) => `<div class="mini"><small>${label}</small><b>${value}</b></div>`)
+        .join('');
+
+      $('tot').textContent = dn(r.total);
+
+      $('tb').innerHTML =
+        r.tiers
+          .map((t, i) => `
+            <tr>
+              <td>${NAMES[i]}</td>
+              <td>${fmt(t.units)}</td>
+              <td>${fmt(t.price)} د.ع</td>
+              <td>${dn(t.amount)}</td>
+            </tr>`)
+          .join('') +
+        `
+          <tr class="t"><td>مجموع الاستهلاك</td><td>${fmt(r.units)}</td><td>—</td><td>${dn(r.sub)}</td></tr>
+          <tr><td>أجور الطباعة</td><td>—</td><td>—</td><td>${dn(r.fee)}</td></tr>
+          <tr class="t"><td>الإجمالي النهائي</td><td>—</td><td>—</td><td>${dn(r.total)}</td></tr>`;
+
+      $('pct').innerHTML = r.tiers
+        .map((t, i) => {
+          const share = r.units ? (t.units / r.units * 100).toFixed(1) : '0.0';
+          return `<span>${NAMES[i]}: ${share}%</span>`;
+        })
+        .join('');
+
+      const L = cfg.limits;
+      const u = r.units;
+      const percent = Math.min(100, u / (L[2] * 1.25) * 100);
+
+      let level;
+      if (u <= L[0]) {
+        level = ['var(--ok)', 'استهلاكك منخفض ضمن الشريحة الأولى. استمر في الترشيد.'];
+      } else if (u <= L[1]) {
+        level = ['var(--yellow)', 'استهلاكك متوسط. تقليل الاستهلاك قد يخفض فاتورتك.'];
+      } else if (u <= L[2]) {
+        level = ['var(--warn)', 'استهلاكك مرتفع. تقليل الاستهلاك قد يخفض فاتورتك بشكل ملحوظ.'];
+      } else {
+        level = ['var(--danger)', 'استهلاكك مرتفع جداً ويدخل الشريحة الأعلى سعراً. تقليله يخفض الفاتورة كثيراً.'];
+      }
+
+      $('lvl').style.width = percent + '%';
+      $('lvl').style.background = level[0];
+      $('lvlTx').textContent = level[1];
+
+      $('res').scrollIntoView({ behavior: 'smooth' });
+    }
+
+    function text(r) {
+      return [
+        'حاسبة فاتورة الكهرباء المنزلية – العراق',
+        'التاريخ: ' + r.date,
+        `القراءة السابقة: ${fmt(r.prev)} | اللاحقة: ${fmt(r.next)}`,
+        'الاستهلاك: ' + fmt(r.units) + ' kWh',
+        ...r.tiers.map((t, i) => `الشريحة ${NAMES[i]}: ${fmt(t.units)} × ${t.price} = ${dn(t.amount)}`),
+        'مجموع الاستهلاك: ' + dn(r.sub),
+        'أجور الطباعة: ' + dn(r.fee),
+        'الإجمالي المستحق: ' + dn(r.total)
+      ].join('\n');
+    }
+
+    function note(message) {
+      $('msg').textContent = message;
+      setTimeout(() => $('msg').textContent = '', 2500);
+    }
+
+    $('cp').onclick = async () => {
+      try {
+        await navigator.clipboard.writeText(text(cur));
+        note('تم نسخ التفاصيل');
+      } catch (e) {
+        const area = document.createElement('textarea');
+        area.value = text(cur);
+        document.body.appendChild(area);
+        area.select();
+        try {
+          document.execCommand('copy');
+          note('تم نسخ التفاصيل');
+        } catch (err) {
+          note('تعذر النسخ');
+        }
+        area.remove();
+      }
+    };
+
+    $('pr').onclick = () => window.print();
+
+    $('pdf').onclick = () => {
+      alert('في نافذة الطباعة اختر «حفظ كـ PDF» كوجهة الطباعة.');
+      window.print();
+    };
+
+    $('img').onclick = () => {
+      const r = cur;
+      const canvas = document.createElement('canvas');
+      canvas.width = 720;
+      canvas.height = 620;
+      const ctx = canvas.getContext('2d');
+
+      ctx.fillStyle = '#00B295';
+      ctx.fillRect(0, 0, 720, 620);
+      ctx.fillStyle = '#4fdcc6';
+      ctx.fillRect(0, 0, 720, 8);
+
+      ctx.direction = 'rtl';
+      ctx.textAlign = 'right';
+      ctx.font = '700 30px Cairo,Tahoma,sans-serif';
+      ctx.fillStyle = '#fff';
+      ctx.fillText('فاتورة الكهرباء المنزلية – العراق', 680, 70);
+
+      ctx.font = '400 20px Cairo,Tahoma,sans-serif';
+      ctx.fillStyle = 'rgba(255,255,255,.8)';
+      ctx.fillText(r.date, 680, 105);
+
+      ctx.fillStyle = '#fff';
+      ctx.font = '600 22px Cairo,Tahoma,sans-serif';
+
+      const lines = [
+        ['الاستهلاك', fmt(r.units) + ' kWh'],
+        ...r.tiers.map((t, i) => ['الشريحة ' + NAMES[i] + ' (' + fmt(t.units) + ' وحدة)', dn(t.amount)]),
+        ['أجور الطباعة', dn(r.fee)]
+      ];
+
+      let y = 165;
+      lines.forEach(([label, value]) => {
+        ctx.textAlign = 'right';
+        ctx.fillText(label, 680, y);
+        ctx.textAlign = 'left';
+        ctx.fillText(value, 40, y);
+        y += 48;
+      });
+
+      ctx.fillStyle = '#fff';
+      ctx.fillRect(40, y, 640, 4);
+      y += 60;
+
+      ctx.textAlign = 'right';
+      ctx.font = '700 26px Cairo,Tahoma,sans-serif';
+      ctx.fillText('الإجمالي المستحق', 680, y);
+
+      ctx.textAlign = 'left';
+      ctx.font = '800 36px Cairo,Tahoma,sans-serif';
+      ctx.fillText(dn(r.total), 40, y + 2);
+
+      const link = document.createElement('a');
+      link.download = 'فاتورة-الكهرباء.png';
+      link.href = canvas.toDataURL('image/png');
+      link.click();
+      note('تم إنشاء الصورة');
+    };
+
+    $('clr').onclick = () => {
+      ['prev', 'next', 'd1', 'd2', 'old'].forEach(id => $(id).value = '');
+      $('fee').value = cfg.fee;
+      $('rst').checked = false;
+      $('rstBox').classList.add('hide');
+      showErr('');
+      $('res').hidden = true;
+      cur = null;
+    };
+
+    function showLast() {
+      const last = fetchS('last');
+      if (!last) return;
+
+      $('last').hidden = false;
+      $('lastTx').textContent = `${last.date} — الاستهلاك ${fmt(last.units)} kWh — الإجمالي ${dn(last.total)}`;
+    }
+
+    $('load').onclick = () => {
+      const last = fetchS('last');
+      if (!last) return;
+
+      cur = last;
+      $('prev').value = last.prev;
+      $('next').value = last.next;
+      $('d1').value = last.d1 || '';
+      $('d2').value = last.d2 || '';
+      $('fee').value = last.fee;
+      render(last);
+    };
+
+    showLast();
+
+    const [passed, total] = runTests();
+    $('test').textContent = passed === total
+      ? `اجتازت اختبارات محرك الحساب (${passed}/${total})`
+      : `فشل في اختبارات محرك الحساب (${passed}/${total})`;
+
+    document.addEventListener('pointerdown', e => {
+      const btn = e.target.closest('.btn');
+      if (!btn) return;
+
+      const rect = btn.getBoundingClientRect();
+      const ripple = document.createElement('span');
+      ripple.className = 'ripple';
+      ripple.style.left = (e.clientX - rect.left) + 'px';
+      ripple.style.top = (e.clientY - rect.top) + 'px';
+      ripple.style.setProperty('--r', Math.ceil(Math.max(rect.width, rect.height) / 5) + 10);
+      btn.appendChild(ripple);
+      setTimeout(() => ripple.remove(), 650);
+
+      btn.classList.remove('is-done');
+      void btn.offsetWidth;
+      btn.classList.add('is-done');
+    });
+  </script>
 </body>
+
 </html>
